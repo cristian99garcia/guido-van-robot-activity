@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><!-- The XHTML and PHP source for this page
+Copyright (c) 2003 Jeffrey Elkner and 2007 Stas Zytkiewicz
+Permission is granted to copy, distribute and/or modify this
+document under the terms of the GNU Free Documentation License,
+Version 1.2  or any later version published by the Free Software
+Foundation; with no Invariant Sections, with no Front-Cover Texts,
+and with no Back-Cover Texts. The full text of the license can be
+found at: http://www.gnu.org/copyleft/fdl.html
+
+This distribution includes a file named  fdl.txt that contains the
+text of the GNU Free Documentation License.  If it is missing, you
+can obtain it from www.gnu.org or by writing to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- base href="http://gvr.sourceforge.net/lessons/rfrank/" -->
+<title>Vuil buiten zetten</title>
+
+<link href="main.css" type="text/css" rel="stylesheet"></head>
+
+
+<body>
+<h1>Vuil buiten zetten</h1>
+<h2>Les 12</h2>
+
+<p>Het <code>doe</code> commando laat Guido meerdere keren een actie doen, maar het heeft een beperking: Je moet van te voren weten hoeveel keer de actie moet worden uitgevoerd.
+Als je op een kruispunt staat en je moet een aantal piepers op pakken maar je weet niet hoeveel er zijn heb je niks aan het <code>doe</code> commando.
+Het <code>terwijl</code> commando kan beter zijn in deze situatie.
+</p>
+<p>
+Het algemene formaat van het <code>terwijl</code> commando is:
+<pre>terwijl <em>test-conditie-is-waar</em>:
+	instructie 
+</pre>
+</p>
+<p>Hier is <i>test-conditie-is-waar</i> een conditie die waar of niet waar is en instructie is een enkel commando (bijv. <code>beweeg</code>) of een aantal commando's in een blok.
+<br><b>Zolang de geteste conditie waar is zal de instructie uit gevoerd worden</b>
+<br>Dus <code>terwijl</code> is gelijk aan <code>doe</code> behalve dat bij <code>doe</code> het aantal keren dat een instructie uitgevoerd moet worden een vast gegeven is en <code>terwijl</code> een test conditie heeft. Zolang de test condite waar is worden de instructies uitgevoerd totdat de condite niet waar is.
+</p>
+<p>Bijvoorbeeld, om een stapel piepers te pakken kun je zoiets gebruiken:
+<pre>terwijl naast_een_pieper:
+	pak_pieper
+</pre>
+</p>
+<p>Dit zegt dat zolang er piepers op het kruispunt staan, pak er een en controleer weer. Het resultaat zal zijn dat geen piepers meer zijn op het kruispunt maar dat ze in Guido's pieperzak zitten.
+</p>
+<p>Een <code>terwijl</code> lus schrijven is lastig; er zijn veel details waar je rekening mee moet houden.
+<br>In het algemeen zijn de stappen deze:
+<br>(Deze stappen wijken iets af van de originele tekst welke enigzins verwarrend was)
+<br>1 Kijk welke test conditie <b>waar</b> moet zijn als Guido <b>niet</b> klaar is met de lus.
+<br>2 Zorg dat eventuele voorbereidende code compleet is voordat de lus start zodat je start met een bekend.
+<br>3 Zorg dat elke passage door de lus bijdraagt aan het voltooien van de lus.
+<br>4 Zorg dat de test conditie uiteindelijk onwaar wordt zodat je ook weer uit de lus komt.
+<br>5 Schrijf code die zorgt voor het opruimen van oude code na het eindigen van de lus.
+</p>
+<p>Kijk uit voor <b>oneindige lussen</b>, dat zijn lussen die nooit eindigen</p>
+
+<p><b>Opdracht:</b><br>
+<p>Het is maandag morgen en voordat Guido naar school gaat moet hij nog het vuilnis buiten zetten. Hij weet niet hoeveel vuilniszakken (voorgesteld door piepers) er zijn. 
+<br>Hij weet dat ze in een hoek van de kamer staan zoals in deze wereld.
+</p>
+<p><img src="12.png" width="270" height="231" border="0" alt=""></p>
+<p>Hij moet alle zakken pakken in een keer meenemen en in de container gooien. Gebruik een of meer <code>terwijl</code> commando's om Guido te vertellen het vuil buiten te zetten. Na het weggooien van het vuil moet Guido weer uit de container lopen om te zien of het vuil goed is weggegooid.
+</p>
+<h2>Erkenning</h2>
+<p>
+Deze serie Guido van Robot lessen zijn geschreven door 
+<a href="http://www.rfrank.net/">Roger Frank</a>.<br>
+Commentaar and suggesties over deze lessen kunnen gestuurd worden naar 
+<a href="mailto:stas.zytkiewicz@gmail.com">Stas Zytkiewicz</a> die de lessen
+vertaalde naar het Nederlands.<br>
+De orginele lessen zijn te vinden op de 
+<a href="http://gvr.sf.net/">Guido van Robot website</a>.
+</p>
+<hr>
+<p style="text-align: center;">
+ <a href="01.html">Next</a></p>
+
+<p class="copyleft">
+<a href="http://www.gnu.org/copyleft/copyleft.html">
+Copyright</a> <br>
+© 2003 <a href="http://www.elkner.net/">Jeffrey Elkner</a>.<br>
+© 2007 <a href="mailto:stas.zytkiewicz@gmail.com">Stas Zytkiewicz</a>.
+</p>

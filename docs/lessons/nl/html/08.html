@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><!-- The XHTML and PHP source for this page
+Copyright (c) 2003 Jeffrey Elkner and 2007 Stas Zytkiewicz
+Permission is granted to copy, distribute and/or modify this
+document under the terms of the GNU Free Documentation License,
+Version 1.2  or any later version published by the Free Software
+Foundation; with no Invariant Sections, with no Front-Cover Texts,
+and with no Back-Cover Texts. The full text of the license can be
+found at: http://www.gnu.org/copyleft/fdl.html
+
+This distribution includes a file named  fdl.txt that contains the
+text of the GNU Free Documentation License.  If it is missing, you
+can obtain it from www.gnu.org or by writing to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- base href="http://gvr.sourceforge.net/lessons/rfrank/" -->
+<title>Vuilnis ophalen</title>
+
+<link href="main.css" type="text/css" rel="stylesheet"></head>
+
+
+<body>
+<h1>Vuilnis ophalen</h1>
+<h2>Les 8</h2>
+<p>
+Toen Guido nog een tiener was, was hij nogal opstandig. Zijn ouders zeiden tegen hem: doe dit, doe dat, linksaf, rechtsaf. Op een dag zei Guido "Stop, ik kan mijn eigen beslissingen nemen!" en vertelde hoe hij zijn beslissingen kon nemen.
+</p>
+<p>
+Hij vertelde over logische (boolean) expressies, welke uitsluitend "waar" of "niet waar" konden zijn. Guido kan diversen dingen doen afhankelijk van de uitkomst van zo'n expressie.
+De waardes "waar" en "niet waar" worden ook vaak aangegeven met 1 en 0, dus "niet waar" is gelijk aan 0 en "waar" is gelijk aan 1.
+</p>
+<p>
+Hier is een voorbeeld van zo'n expressie:<br>
+<pre>als naast_een_pieper:
+    pak_pieper
+</pre>
+</p>
+<p>
+Dus, als Guido wel naast een pieper staat, is de expressie "naast_een_pieper" waar, en wordt pak_pieper uitgevoerd.
+</p>
+<p>
+Als Guido niet naast een pieper staat is de expressie niet waar en wordt er verder gegaan na het code blok.
+Guido heeft de mogelijkheid om zijn wereld te verkennen en daar naar te handelen al gelang de uitkomst van een expressie.
+</p>
+<p>
+Deze expressies heeft hij tot zijn beschikking:
+</p>
+<p>
+<table cellpadding="0" cellspacing="0" border="1" align="left">
+	<tr><td colspan=2>Muur tests:</td></tr>
+	<tr><td><b>voorkant_is_vrij</b></td><td>Waar als er geen muur recht voor hem staat. niet waar als er wel een staat.</td></tr>
+	<tr><td><b>voorkant_is_versperd</b></td><td>Waar als er een muur recht voor hem staat. niet waar als er geen staat.</td></tr>
+	<tr><td><b>links_is_versperd</b></td><td>Waar als er een muur links van hem staat. niet waar als links vrij is.</td></tr>
+	<tr><td><b>links_is_vrij</b></td><td>Waar als er geen muur links staat. niet waar als links versperd is.</td></tr>
+	<tr><td><b>rechts_is_vrij</b></td><td>Idem als bij links.</td></tr>
+	<tr><td><b>rechts_is_versperd</b></td><td>Idem als bij links.</td></tr>
+	<tr><td colspan=2>pieper tests:</td></tr>
+	<tr><td><b>naast_een_pieper</b></td><td>Waar als Guido op dezelfde kruising staat als een pieper (op een pieper staat)</td></tr>
+	<tr><td><b>niet_naast_een_pieper</b></td><td>Waar als Guido niet op dezelfde kruising staat als een pieper.</td></tr>
+	<tr><td><b>enige_piepers_in_piepertas</b></td><td>Waar als er tenminste nog een pieper in de pieper zak zit.</td></tr>
+	<tr><td><b>geen_piepers_in_piepertas</b></td><td>Waar als er geen piepers meer in de pieper zak zitten.</td></tr>	
+	<tr><td colspan=2>richting tests:</td></tr>
+	<tr><td><b>naar_noord</b></td><td>Waar als Guido richting het noorden staat. Anders niet waar.</td></tr>
+	<tr><td><b>niet_naar_noord</b></td><td>Waar als Guido niet naar het noorden staat. Anders niet waar.</td></tr>
+	<tr><td><b>naar_zuid</b></td><td>De rest spreekt voor zich,</td></tr>
+	<tr><td><b>niet_naar_zuid</b></td><td></td></tr>
+	<tr><td><b>naar_oost</b></td><td></td></tr>
+	<tr><td><b>niet_naar_oost</b></td><td></td></tr>
+	<tr><td><b>naar_west</b></td><td></td></tr>
+	<tr><td><b>niet_naar_west</b></td><td></td></tr>
+</table>
+</p>
+<p>
+<b>Opdracht:</b><br>
+Guido heeft op weg naar school allerlei troep op straat gegooid en nu moet hij het uiteraard zelf gaan opruimen.
+Maak een wereld waarin een aantal piepers verspreid liggen over de 2e straat tussen de 1e laan en de muur op de oost hoek van de 12e laan. Er kan maar een pieper op een kruising liggen, maar op een kruising kan wel of geen pieper liggen. Guido moet beginnen op de kruising van de 1e laan en de 2e straat richting Oost.
+</p>
+<p>
+Een begin situatie moet er ongeveer zo uitzien:
+</p>
+<p><img src="08_2.png" width="355" height="203" border="0" alt=""></p>
+<p>Laat Guido de 2e straat aflopen en ondertussen alle rotzooi oppakken.
+Denk eraan dat wanneer je Guido een pieper wilt laten pakken als er geen is dan zal hij zichzelf uitschakelen en stopt het programma.
+Gebruik een van de bovenstaande tests om te testen of er een pieper is of niet. Als hij aan het einde is gekomen moet hij met alle piepers weer terug gaan naar waar hij begon en weer in de start richting staan.
+</p>
+<p>Dit moet de eind situatie zijn:</p>
+<p><img src="08_1.png" width="355" height="203" border="0" alt=""></p>
+<h2>Erkenning</h2>
+<p>
+Deze serie Guido van Robot lessen zijn geschreven door 
+<a href="http://www.rfrank.net/">Roger Frank</a>.<br>
+Commentaar and suggesties over deze lessen kunnen gestuurd worden naar 
+<a href="mailto:stas.zytkiewicz@gmail.com">Stas Zytkiewicz</a> die de lessen
+vertaalde naar het Nederlands.<br>
+De orginele lessen zijn te vinden op de 
+<a href="http://gvr.sf.net/">Guido van Robot website</a>.
+</p>
+<hr>
+<p style="text-align: center;">
+ <a href="07.html">Vorige</a> | <a href="index.html">Index</a> | <a href="09.html">Volgende</a></p>
+
+<p class="copyleft">
+<a href="http://www.gnu.org/copyleft/copyleft.html">
+Copyright</a> <br>
+© 2003 <a href="http://www.elkner.net/">Jeffrey Elkner</a>.<br>
+© 2007 <a href="mailto:stas.zytkiewicz@gmail.com">Stas Zytkiewicz</a>.
+</p>

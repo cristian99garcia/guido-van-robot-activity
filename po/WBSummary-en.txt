@@ -1,0 +1,10 @@
+Guido van Robot Worldbuilder Summary
+Editing world:
+    Left mouse button : Add or remove walls 
+    Middle mouse button: Set arguments for the robot statement
+    Right mouse button: Set arguments for the beeper statement
+    
+Buttons:
+    Reload   : Reload the world from the editor window
+               into the worldbuilder.
+    Abort    : Quit the worldbuilder, *not* GvRng.

@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><!-- The XHTML and PHP source for this page
+Copyright (c) 2003 Jeffrey Elkner and 2007 Stas Zytkiewicz
+Permission is granted to copy, distribute and/or modify this
+document under the terms of the GNU Free Documentation License,
+Version 1.2  or any later version published by the Free Software
+Foundation; with no Invariant Sections, with no Front-Cover Texts,
+and with no Back-Cover Texts. The full text of the license can be
+found at: http://www.gnu.org/copyleft/fdl.html
+
+This distribution includes a file named  fdl.txt that contains the
+text of the GNU Free Documentation License.  If it is missing, you
+can obtain it from www.gnu.org or by writing to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- base href="http://gvr.sourceforge.net/lessons/rfrank/" -->
+<title>Appeltaart of koekjes</title>
+
+<link href="main.css" type="text/css" rel="stylesheet"></head>
+
+
+<body>
+<h1>Appeltaart of koekjes</h1>
+<h2>Les 11</h2>
+
+<p>
+Je kent al het <code>als</code> commando. Je gebruikt het om een keuze te maken
+zoals in <em>als naast een pieper, pak het op.</em><br>
+Soms wil je ingewikkeldere keuzes maken. Guido houd van appeltaat maar zijn moeder
+heeft die niet altijd, ze heeft wel altijd koekjes. Hij wil dus een uitdrukking (statement)
+als: "Mam, ik wil een stuk appeltaart, maar als je die niet heb, dan wil ik een koekje"
+<br>Je kunt de <code>als...dan...</code> uitdrukking gebruiken voor dit soort
+twee-weg keuze uitdrukkingen.
+</p>
+<p>
+Het is net zo als de <code>als</code> uitdrukking maar we voegen er een <code>dan</code>
+stuk aan toe zodat er een andere actie plaats vind als de <code>anders</code>
+uitdrukking <em>niet</em> waar is.
+</p>
+<p>De vorm van deze conditionele uitdrukking met een <code>anders</code> conditie is:
+<pre>als <em>test-conditie</em>:
+    instructie
+anders:
+    andere-instructie
+</pre>
+</p>
+<p><em>instructie</em> kan een simpel commando zijn als <code>beweeg</code>
+of een blok commando's. Code om een pieper te pakken of anders door te lopen
+kan geschreven worden als:
+<pre>
+als_naast_een_pieper:
+    pak_pieper
+    beweeg
+anders:
+    beweeg   
+</pre> 
+Onthou dat <code>anders</code> niet altijd nodig is, gebruik het alleen als het zinvol is.
+</p>
+<p><b>Opdracht:</b><br>
+In deze opdracht gaat Guido een afgesloten wereld rond. Hij weet niet de afmetingen van de wereld. Wat hij wel weet is dat er op elke hoek een pieper staat behalve op de hoek waar hij begint.
+</p>
+<p>Guido start links onder richting het Oosten. Als hij niet naast een pieper staat beweegt hij voorwaarts anders pakt hij de pieper, gaat linksaf en beweegt.
+Creeer een wereld die in 32 stappen is rond te gaan. Plaats piepers in de drie hoeken. Gebruik nu een <code>doe</code> commando (32 keer) en een <code>als...dan</code> commando om de wereld rond te gaan.
+</p>
+<p>Je wereld moet er ongeveer zo uit zien.
+</p>
+<p><img src="11.png" width="277" height="275" border="0" alt=""></p>
+<h2>Erkenning</h2>
+<p>
+Deze serie Guido van Robot lessen zijn geschreven door 
+<a href="http://www.rfrank.net/">Roger Frank</a>.<br>
+Commentaar and suggesties over deze lessen kunnen gestuurd worden naar 
+<a href="mailto:stas.zytkiewicz@gmail.com">Stas Zytkiewicz</a> die de lessen
+vertaalde naar het Nederlands.<br>
+De orginele lessen zijn te vinden op de 
+<a href="http://gvr.sf.net/">Guido van Robot website</a>.
+</p>
+<hr>
+<p style="text-align: center;">
+ <a href="10.html">Vorige</a> | <a href="index.html">Index</a> | <a href="12.html">Volgende</a></p>
+
+<p class="copyleft">
+<a href="http://www.gnu.org/copyleft/copyleft.html">
+Copyright</a> <br>
+© 2003 <a href="http://www.elkner.net/">Jeffrey Elkner</a>.<br>
+© 2007 <a href="mailto:stas.zytkiewicz@gmail.com">Stas Zytkiewicz</a>.
+</p>

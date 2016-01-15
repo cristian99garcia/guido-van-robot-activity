@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><!-- The XHTML and PHP source for this page
+Copyright (c) 2003 Jeffrey Elkner and 2007 Stas Zytkiewicz
+Permission is granted to copy, distribute and/or modify this
+document under the terms of the GNU Free Documentation License,
+Version 1.2  or any later version published by the Free Software
+Foundation; with no Invariant Sections, with no Front-Cover Texts,
+and with no Back-Cover Texts. The full text of the license can be
+found at: http://www.gnu.org/copyleft/fdl.html
+
+This distribution includes a file named  fdl.txt that contains the
+text of the GNU Free Documentation License.  If it is missing, you
+can obtain it from www.gnu.org or by writing to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- base href="http://gvr.sourceforge.net/lessons/rfrank/" -->
+<title>Muren</title>
+
+<link href="main.css" type="text/css" rel="stylesheet"></head>
+
+
+<body>
+<h1>Muren</h1>
+<h2>Les 4</h2>
+
+<p>
+Je kunt nu Guido programmeren om in zijn wereld rond te lopen, piepers te pakken en te plaatsen. Om zijn wereld wat interessanter te maken gaan we muren plaatsen die Guido moet zien te vermijden.
+Als Guido tegen een muur aanloopt wordt het programma gestopt met een fout melding. Dit is in de robot ingebouwd.
+Als hij iets moet doen wat niet kan dan stopt het programma. Bijvoorbeeld, als je hem een pieper wilt laten pakken die er niet is, dan stopt hij. Hetzelfde geldt voor het plaatsen van een pieper als hij geen piepers meer heeft.
+</p>
+<p>Dus wees voorzichtig en laat Guido geen dingen doen die niet kunnen.
+</p>
+<p>
+Hier is een voorbeeld van een wereld bestand met muren:
+<pre>
+Robot 1 5 O 1
+Muur 2 4 N
+Muur 2 4 O
+Muur 3 4 O
+Muur 4 4 N 2
+Muur 2 5 N
+Muur 2 6 O
+Muur 3 6 O
+Muur 4 5 N 2
+</pre>
+het formaat van een muur omschrijving is:
+<br>
+1e nummer: laan (horizontaal)<br>
+2e nummer: straat (verticaal)<br>
+3e nummer: kruispunt versperd naar het (N)oorden, (Z)uiden, (O)osten, (W)esten<br>
+4e nummer: (optioneel) lengte van de muur (in het verlengde)<br>
+<br>
+Als je nu dit wereld bestand laad zal het er ongeveer zo uitzien:
+</p>
+<p>
+<img src="04_1.png" width="230" height="222" border="0" alt="">
+</p>
+<p><b>Opdracht:</b><br>
+Verander het wereld bestand zo dat het het pad voor Guido deels gesloten is zoals in deze afbeelding: </p>
+</p>
+<p><img src="04_2.png" width="253" height="228" border="0" alt=""></p>
+<p><b>Tip:</b><br>
+Je kunt ook de "Wereld constructeur" gebruiken uit het "GvR" menu.
+</p>
+<h2>Erkenning</h2>
+<p>
+Deze serie Guido van Robot lessen zijn geschreven door 
+<a href="http://www.rfrank.net/">Roger Frank</a>.<br>
+Commentaar and suggesties over deze lessen kunnen gestuurd worden naar 
+<a href="mailto:stas.zytkiewicz@gmail.com">Stas Zytkiewicz</a> die de lessen
+vertaalde naar het Nederlands.<br>
+De orginele lessen zijn te vinden op de 
+<a href="http://gvr.sf.net/">Guido van Robot website</a>.
+</p>
+<hr>
+<p style="text-align: center;">
+ <a href="03.html">Vorige</a> | <a href="index.html">Index</a> | <a href="05.html">Volgende</a></p>
+
+<p class="copyleft">
+<a href="http://www.gnu.org/copyleft/copyleft.html">
+Copyright</a> <br>
+© 2003 <a href="http://www.elkner.net/">Jeffrey Elkner</a>.<br>
+© 2007 <a href="mailto:stas.zytkiewicz@gmail.com">Stas Zytkiewicz</a>.
+</p>

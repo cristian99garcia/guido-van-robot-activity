@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><!-- The XHTML and PHP source for this page
+Copyright (c) 2003 Jeffrey Elkner and 2007 Stas Zytkiewicz
+Permission is granted to copy, distribute and/or modify this
+document under the terms of the GNU Free Documentation License,
+Version 1.2  or any later version published by the Free Software
+Foundation; with no Invariant Sections, with no Front-Cover Texts,
+and with no Back-Cover Texts. The full text of the license can be
+found at: http://www.gnu.org/copyleft/fdl.html
+
+This distribution includes a file named  fdl.txt that contains the
+text of the GNU Free Documentation License.  If it is missing, you
+can obtain it from www.gnu.org or by writing to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- base href="http://gvr.sourceforge.net/lessons/rfrank/" -->
+<title>Nog meer vuilnis</title>
+
+<link href="main.css" type="text/css" rel="stylesheet"></head>
+
+
+<body>
+<h1>Nog meer vuilnis</h1>
+<h2>Les 9</h2>
+
+<p>In de voorgaande les hebben we een programma gemaakt om Guido vuilnis op te laten ruimen. Je zult waarschijnlijk een <b>als</b> commando gebruikt hebben ("als er vuilnis is, pak het op") gevolgd door een <b>beweeg</b> commando.
+Vervolgens heb je dit net zoveel keer gekopieerd totdat je genoeg had om Guido de hele weg laten aflopen. 
+</p>
+<p>Er is een beter manier om een (groep) commando(s) iedere keer te herhalen: het <b>doe</b> commando.
+Het <b>doe</b> commando laat je een aantal commando's een bepaald aantal keren uitvoeren.
+<br>Bijvoorbeeld,
+<pre>doe 5:
+     beweeg
+</pre>
+</p>
+<p>dit laat Guido 5 stappen vooruit nemen. Als je meerdere commando's wilt laten uitvoeren moet je ze groeperen door iedere regel evenveel spaties (tabs) te laten inspringen: 
+<pre>doe 5:
+     plaats_pieper
+     beweeg
+</pre>
+</p>
+<p>
+Het is verplicht om ieder regel met een gelijk aantal spaties te laten inspringen als je ze wilt groeperen. Als je per ongeluk schrijft,
+<pre>
+doe 5:
+     plaats_pieper
+beweeg
+</pre>
+zullen er 5 piepers op dezelfde plaats gezet worden en vervolgens een stap vooruit genomen worden. Dit is waarschijnlijk niet de bedoeling. Dus let op dat je iedere keer hetzelfde aantal spaties aanhoud om een groep commando's ook echt bij elkaar te houden.
+(Update: vanaf versie 0.9.2, kun je de tab toets gebruiken om altijd de hetzelfde aantal spaties te gebruiken)
+</p>
+<p>
+<b>Opdracht:</b><br>
+Guido is nu een stuk slimmer en kent het herhaal (iterate) commando. Hij moet weer de vuilnis gaan oprapen in de 2e straat. Herschrijf je programma uit les 08 en maak gebruik van het <b>doe</b> commando.
+</p>
+
+
+<h2>Erkenning</h2>
+<p>
+Deze serie Guido van Robot lessen zijn geschreven door 
+<a href="http://www.rfrank.net/">Roger Frank</a>.<br>
+Commentaar and suggesties over deze lessen kunnen gestuurd worden naar 
+<a href="mailto:stas.zytkiewicz@gmail.com">Stas Zytkiewicz</a> die de lessen
+vertaalde naar het Nederlands.<br>
+De orginele lessen zijn te vinden op de 
+<a href="http://gvr.sf.net/">Guido van Robot website</a>.
+</p>
+<hr>
+<p style="text-align: center;">
+ <a href="08.html">Vorige</a> | <a href="index.html">Index</a> | <a href="10.html">Volgende</a></p>
+<p class="copyleft">
+<a href="http://www.gnu.org/copyleft/copyleft.html">
+Copyright</a> <br>
+© 2003 <a href="http://www.elkner.net/">Jeffrey Elkner</a>.<br>
+© 2007 <a href="mailto:stas.zytkiewicz@gmail.com">Stas Zytkiewicz</a>.
+</p>

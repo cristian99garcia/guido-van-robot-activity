@@ -437,14 +437,12 @@ class window_main(Gtk.VBox):
 
         self.menuitem48 = Gtk.ImageMenuItem(_("Open worldbuilder"))
         self.menuitem48.set_image(Gtk.Image.new_from_stock(Gtk.STOCK_LEAVE_FULLSCREEN, Gtk.IconSize.MENU))
-        ##self.menuitem48.connect("activate", self.on_open_worldbuilder1_activate)
         self.menuitem31_menu.append(self.menuitem48)
 
         self.menuitem31_menu.append(Gtk.SeparatorMenuItem())
 
         self.imagemenuitem49 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_QUIT)
         self.imagemenuitem49.set_image(Gtk.Image.new_from_stock(Gtk.STOCK_LEAVE_FULLSCREEN, Gtk.IconSize.MENU))
-        ##self.imagemenuitem49.connect("activate", self.on_quit1_activate)
         self.menuitem31_menu.append(self.imagemenuitem49)
 
         self.menuitem32 = Gtk.MenuItem(_("_Setup"))
@@ -456,12 +454,10 @@ class window_main(Gtk.VBox):
 
         self.imagemenuitem50 = Gtk.ImageMenuItem(_("Set speed..."))
         self.imagemenuitem50.set_image(Gtk.Image.new_from_stock(Gtk.STOCK_REFRESH, Gtk.IconSize.MENU))
-        ##self.imagemenuitem50.connect("activate", self.on_set_speed1_activate)
         self.menuitem32_menu.append(self.imagemenuitem50)
 
         self.imagemenuitem51 = Gtk.ImageMenuItem(_("Set language"))
         self.imagemenuitem51.set_image(Gtk.Image.new_from_stock(Gtk.STOCK_SPELL_CHECK, Gtk.IconSize.MENU))
-        ##self.imagemenuitem50.connect("activate", self.on_set_language1_activate)
         self.menuitem32_menu.append(self.imagemenuitem51)
 
         self.menuitem33 = Gtk.MenuItem(_("_Help"))
@@ -473,12 +469,10 @@ class window_main(Gtk.VBox):
 
         self.imagemenuitem52 = Gtk.ImageMenuItem(_("Gvr Lessons"))
         self.imagemenuitem52.set_image(Gtk.Image.new_from_stock(Gtk.STOCK_DND_MULTIPLE, Gtk.IconSize.MENU))
-        ##self.imagemenuitem52.connect("activate", self.on_gvr_lessons1_activate)
         self.menuitem33_menu.append(self.imagemenuitem52)
 
         self.imagemenuitem54 = Gtk.ImageMenuItem(_("GvR Worldbuilder"))
         self.imagemenuitem54.set_image(Gtk.Image.new_from_stock(Gtk.STOCK_LEAVE_FULLSCREEN, Gtk.IconSize.MENU))
-        ##self.imagemenuitem54.connect("activate", self.on_gvr_worldbuilder1_activate)
         self.menuitem33_menu.append(self.imagemenuitem54)
 
         self.menuitem33_menu.append(Gtk.SeparatorMenuItem())
@@ -486,7 +480,6 @@ class window_main(Gtk.VBox):
         self.imagemenuitem55 = Gtk.ImageMenuItem(_("_About"))
         self.imagemenuitem55.set_use_underline(True)
         self.imagemenuitem55.set_image(Gtk.Image.new_from_stock(Gtk.STOCK_DIALOG_QUESTION, Gtk.IconSize.MENU))
-        ##self.imagemenuitem55.connect("activate", self.on_about1_activate)
         self.menuitem33_menu.append(self.imagemenuitem55)
 
         self.frame6 = Gtk.Frame()
@@ -504,7 +497,6 @@ class window_main(Gtk.VBox):
         self.alignment13.add(self.hbuttonbox1)
 
         self.button_reload = Gtk.Button()
-        ##self.button_reload.connect("clicked", self.on_button_reload)
         self.hbuttonbox1.add(self.button_reload)
 
         self.alignment14 = Gtk.Alignment()
@@ -523,7 +515,6 @@ class window_main(Gtk.VBox):
         self.hbox9.pack_start(self.label21, False, False, 0)
 
         self.button_step = Gtk.Button()
-        ##self.button_step.connect("clicked", self.on_button_step)
         self.hbuttonbox1.add(self.button_step)
 
         self.alignment15 = Gtk.Alignment()
@@ -542,7 +533,6 @@ class window_main(Gtk.VBox):
         self.hbox10.pack_start(self.label22, False, False, 0)
 
         self.button_execute = Gtk.Button()
-        ##self.button_execute.connect("clicked", self.on_button_execute)
         self.hbuttonbox1.add(self.button_execute)
 
         self.alignment16 = Gtk.Alignment()
@@ -561,7 +551,6 @@ class window_main(Gtk.VBox):
         self.hbox11.pack_start(self.label23, False, False, 0)
 
         self.button_abort = Gtk.Button()
-        ##self.button_abort.connect("clicked", self.on_button_abort)
         self.hbuttonbox1.add(self.button_abort)
 
         self.alignment1 = Gtk.Alignment()
@@ -585,8 +574,6 @@ class window_main(Gtk.VBox):
         self.vbox11.pack_start(self.scrolledwindow8, False, False, 0)
 
         self.statusbar7 = Gtk.Statusbar()
-        ##self.statusbar7.connect("text-pushed", self.on_statusbar1_text_pushed)
-        ##self.statusbar7.connect("text-popped", self.on_statusbar1_text_popped)
         self.vbox11.pack_end(self.statusbar7, False, False, 0)
 
         self.label19 = Gtk.Label()
@@ -647,15 +634,4 @@ class window_main(Gtk.VBox):
         self.frame7.add(self.alignment18)
 
         self.show_all()
-
-if __name__ == "__main__":
-    QuitDialog()
-    AboutDialog()
-    FileDialog()
-    EditorWin()
-    SetLanguageDialog()
-    SetSpeedDialog()
-    SummaryDialog()
-    RobotDialog()
-    window_main()
 

@@ -18,11 +18,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-# Reminder:
-# "widgets in classes derivated from SimpleGladeApp is easy and intuitive.
-# So, a widget created with glade you named 'bogus_widget' will be used in
-# your code as 'self.bogus_widget'."
-
 import version
 app_name = "gvrng"# used to set gettext
 app_version = version.VERSION
@@ -35,9 +30,6 @@ import gvr_gtk_glade
 
 glade_dir = utils.FRONTENDDIR
 locale_dir = utils.LOCALEDIR
-
-from SimpleGtk3GladeApp import SimpleGladeApp
-from SimpleGtk3GladeApp import bindtextdomain
 
 from gi.repository import Gtk
 from gi.repository import GObject
@@ -53,8 +45,6 @@ from sugar3.activity.widgets import StopButton
 
 import Editors
 import Widgets
-
-bindtextdomain(app_name, utils.get_locale(), locale_dir)
 
 
 class Globals(super):
@@ -108,11 +98,11 @@ class Window(gvr_gtk_glade.window_main):
                 utils.setRcEntry('intro', 'no')
 
         except KeyError:
-            # versions < 2.9 don't have 'intro', but those users already know gvr :-)
             pass
 
+        self.new()
+
     def new(self):
-        # called by SimpleGladeApp
         self.statusbar = Widgets.StatusBar(self.statusbar7)
         self._setup_canvas()
         # these calls will add the editors to the GUI
@@ -536,9 +526,10 @@ class TextEditorWin(gvr_gtk_glade.EditorWin):
         self.loaded_file_path = ''
         self.loaded_txt = []
 
+        self.new()
+
     def new(self):
         """This implements a GtkSource widget from Editors.py"""
-        #Called by SimpleGladeApp
         # We use different editors on win32 as GtkSource isn't available
         # Editors can be Editors.py or Win_Editors.py, see import statement above
         self.editor = Editors.Editor(self.scrolledwindow1)
@@ -817,11 +808,12 @@ class SetLanguageDialog(gvr_gtk_glade.SetLanguageDialog):
         pass
 
 
-class SetSpeedDialog(SimpleGladeApp):
+class SetSpeedDialog(gvr_gtk_glade.SetSpeedDialog):
 
-    def __init__(self, root="SetSpeedDialog", domain=app_name, **kwargs):
-        path = os.path.join(glade_dir, path)
-        SimpleGladeApp.__init__(self, path, root, domain, **kwargs)
+    def __init__(self, **kwargs):
+        gvr_gtk_glade.SetSpeedDialog.__init__(self)
+
+        self.new()
 
     def new(self):
         options = {
@@ -892,9 +884,8 @@ class SummaryDialog(gvr_gtk_glade.SummaryDialog):
 
 def main():
     main_win = WindowXO()
-
-    # SimpleGladeApp.run() must be called just once per program
     main_win.run()
+
 
 if __name__ == "__main__":
     main()

@@ -33,58 +33,56 @@ import utils,Text
 glade_dir = utils.FRONTENDDIR
 locale_dir = utils.LOCALEDIR
 
-from SimpleGladeApp import SimpleGladeApp
-from SimpleGladeApp import bindtextdomain
+from SimpleGtk3GladeApp import SimpleGladeApp
+from SimpleGtk3GladeApp import bindtextdomain
 
-import pygtk
-# ensure version >= 2.0 of pygtk is imported
-pygtk.require('2.0')
+from gi.repository import Gtk
+from gi.repository import GObject
 
-import gtk
-
-# tell gtk we gonna use threads 
-import gobject
-gobject.threads_init()
+GObject.threads_init()
 
 module_logger = logging.getLogger("gvr.gvr_gtk")
 
 PLATFORM = utils.platform
-if PLATFORM == 'XO':
-    from sugar.activity import activity as sgactivity  
-else:
-    import fake_sugar_activity as sgactivity
-module_logger.debug("Using sugar activity module: %s" % sgactivity)    
+from sugar3.activity import activity as sgactivity
+
+module_logger.debug("Using sugar activity module: %s" % sgactivity)
     
 if sys.platform == 'win32':
     import Win_Editors as Editors
 else:
     import Editors
+
 import Widgets
 
 bindtextdomain(app_name, utils.get_locale(),locale_dir)
 
+
 class Globals(super):
     speed = _('Medium')
 
+
 class Window(SimpleGladeApp):
-    def __init__(self, parent=None, path="gvr_gtk.glade", root="window_main", domain=app_name, **kwargs):
+
+    def __init__(self, parent=None, root="window_main", domain=app_name, **kwargs):
         path = os.path.join(glade_dir, path)
         SimpleGladeApp.__init__(self, path, root, domain, **kwargs)
-        
+
         self.logger = logging.getLogger("gvr.gvr_gtk.Window")
         if PLATFORM != 'XO':
             #self.parentGUI = gtk.Window(gtk.WINDOW_TOPLEVEL)
             self.parentGUI = self.window_main
             file = os.path.join(os.getcwd(),'gui-gtk','pixmaps','gvrIcon.bmp')
+
             try:
                 self.parentGUI.set_icon_from_file(file)
             except gobject.GError:
                 self.logger.exception("Can't load window icon")
-            #self.parentGUI.set_size_request(800,600)
-            self.parentGUI.connect('delete_event',self.stop)
-            
+
+            self.parentGUI.connect('delete_event', self.stop)
+
             # We setup key event callback here as WBCanvas can't recieve them ?? XXX
-            self.parentGUI.add_events( gtk.gdk.KEY_PRESS_MASK )
+            self.parentGUI.add_events(Gdk.EventMask.KEY_PRESS_MASK)
             
             # delete lessons tab as we don't have an embedded browser
             self.eventboxlessons.destroy()
@@ -94,29 +92,34 @@ class Window(SimpleGladeApp):
         # first line is also used as the title
         txt = Text.OnRefText
         #title = txt.split('\n')[0]
-        buffer = gtk.TextBuffer(table=None)
+        buffer = Gtk.TextBuffer()
+
         try:
             txt = ''.join(txt)
             utxt = unicode(txt)
         except Exception,info:
             self.logger.exception("Failed to set reference text in source buffer")
             return
+
         buffer.set_text(utxt)
         self.textview_languagereference.set_buffer(buffer)
         self.textview_languagereference.show_all()
         # and set the intro text
         txt = Text.OnIntroText
-        buffer = gtk.TextBuffer(table=None)
+        buffer = Gtk.TextBuffer()
+
         try:
             txt = ''.join(txt)
             utxt = unicode(txt)
         except Exception,info:
             self.logger.exception("Failed to set intro text in source buffer")
             return
+
         buffer.set_text(utxt)
         self.textview_intro.set_buffer(buffer)
         self.textview_intro.show_all()
         # check if we should show the intro text on startup.
+
         try:
             if utils.RCDICT['default']['intro'].lower() == 'yes':
                 self.notebook1.set_current_page(-1)
@@ -124,18 +127,7 @@ class Window(SimpleGladeApp):
         except KeyError:
             # versions < 2.9 don't have 'intro', but those users already know gvr :-)
             pass
-         
-        # only needed for debugging
-        #self.parentGUI.connect('size-allocate', self._on_size_allocate)
-        
-    # Only used for debugging    
-##    def _on_size_allocate(self, widget, allocation):
-##        self.width = allocation.width
-##        self.height = allocation.height
-##        self.logger.debug("parentGUI x,y: %s" % (self.width,self.height))
-##        return True    
-        
-    
+
     def new(self):
         # called by SimpleGladeApp
         self.statusbar = Widgets.StatusBar(self.statusbar7)
@@ -145,7 +137,7 @@ class Window(SimpleGladeApp):
         self.new_program_editor()
         self._set_sensitive_button('all',True)
         self.timerinterval = 150
-    
+
     def new_world_editor(self):
         self.world_editor = WorldTextEditorWin(parent=self)
     def new_program_editor(self):
@@ -154,31 +146,36 @@ class Window(SimpleGladeApp):
     def _setup_canvas(self):
         # setup the canvas
         self._canvas = Widgets.Canvas()
-        self.align = gtk.Alignment()
-        self.viewport = gtk.Viewport()
+        self.align = Gtk.Alignment()
+        self.viewport = Gtk.Viewport()
         self.scrolledwindow8.add(self.viewport)
         self.viewport.add(self._canvas)
         self.scrolledwindow8.show_all()
         self._set_sensitive_button('all',False)
         self.WB_ACTIVATED = False
+
     def _set_sensitive_button(self,button,value):
         """used to 'grey out' buttons.
         When the @button is 'all', all the buttons are handled.
         We also clear the statusbar if the buttons are disabled."""
         if button == 'all':
-            for b in (self.button_abort,self.button_execute,
-                        self.button_reload,self.button_step):
+            for b in (self.button_abort, self.button_execute, self.button_reload, self.button_step):
                 b.set_sensitive(value)
+
         else:
             but = {'abort':self.button_abort,
                 'reload':self.button_reload,
                 'execute':self.button_execute,
                 'step':self.button_step}[button]
+
             but.set_sensitive(value)
-        if button == 'all' or button in ('reload','step') and value == False:
+
+        if button == 'all' or button in ('reload', 'step') and value == False:
             self.statusbar.clear()
+
     def _worldeditor_observer_callback(self):
         self.world_editor = None
+
     def _programeditor_observer_callback(self):
         self.program_editor = None
         
@@ -191,6 +188,7 @@ class Window(SimpleGladeApp):
             wfile, pfile = args[0], args[1]
             self.world_editor.on_new1_activate(file=wfile)
             self.program_editor.on_new1_activate(file=pfile)
+
         # Sugar runs the gtk loop on XO
         if PLATFORM != 'XO':
             self.parentGUI.show()
@@ -208,7 +206,7 @@ class Window(SimpleGladeApp):
     
     def stop(self,*args):
         """Stops the gui, when running in non-XO"""
-        gtk.main_quit()
+        Gtk.main_quit()
     
     def set_controller(self,contr):
         self.logger.debug("controller set in %s" % self)
@@ -338,22 +336,24 @@ class Window(SimpleGladeApp):
     def on_set_speed1_activate(self, widget, *args):
         dlg = SetSpeedDialog()
         response = dlg.SetSpeedDialog.run()
-        if response == gtk.RESPONSE_OK:
+
+        if response == Gtk.ResponseType.OK:
             self.timerinterval = dlg.get_choice()
+
         dlg.SetSpeedDialog.destroy()
     
     def on_gvr_lessons1_activate(self, widget, *args):
         """Display the GvR lessons in the default browser.
         This only works if the gvr lessons package version 0.2 is installed."""
         import webbrowser
-        file = os.path.join(utils.get_rootdir(),'docs','lessons',utils.get_locale()[:2],'html','index.html')
+        file = os.path.join(utils.get_rootdir(), 'docs', 'lessons', utils.get_locale()[:2], 'html', 'index.html')
         self.logger.debug("Looking for the lessons in %s" % file)
         if not os.path.exists(file) and utils.get_locale()[:2] != 'en':
             file = os.path.join(utils.get_rootdir(),'docs','lessons','en','html','index.html')
             self.logger.debug("Looking for the lessons in %s" % file)
         if os.path.exists(file):
             try:
-                webbrowser.open(file,new=0)
+                webbrowser.open(file, new=0)
             except webbrowser.Error,info:
                 txt = str(info)+ '\n'+ "Be sure to set your env. variable 'BROWSER' to your preffered browser."
                 self.show_warning(txt)
@@ -363,7 +363,7 @@ class Window(SimpleGladeApp):
 ##    def on_set_language1_activate(self, widget, *args):                     
 ##        dlg = SetLanguageDialog()
 ##        response = dlg.SetLanguageDialog.run()
-##        if response == gtk.RESPONSE_OK:
+##        if response == Gtk.ResponseType.OK:
 ##            languagechoice = dlg.get_choice()
 ##        dlg.SetLanguageDialog.destroy()
 ##        #print "languagechoice",languagechoice
@@ -429,8 +429,10 @@ class Window(SimpleGladeApp):
         pass
         
 class WindowXO(Window):
-    def __init__(self, handle,parent=None, path="gvr_gtk.glade", root="window_main", domain=app_name, **kwargs):
-        Window.__init__(self,parent=parent, path=path, root=root, domain=domain)
+
+    def __init__(self, handle,parent=None, root="window_main", domain=app_name, **kwargs):
+        Window.__init__(self,parent=parent, root=root, domain=domain)
+
         self._parent = parent
         self.logger = logging.getLogger("gvr.gvr_gtk.WindowXO")
         
@@ -465,16 +467,16 @@ class WindowXO(Window):
             file = os.path.join(utils.get_rootdir(),'docs','lessons','en','html','index.html')
         self.WV.load_uri('file:///%s' % file)
         self.WV.show()
-        vbox = gtk.VBox(False,4)
-        vbox.pack_start(Widgets.WebToolbar(self.WV),False,False,2)
-        vbox.pack_start(self.WV,True,True,2)
+        vbox = Gtk.VBox(False, 4)
+        vbox.pack_start(Widgets.WebToolbar(self.WV), False, False, 2)
+        vbox.pack_start(self.WV, True, True, 2)
         vbox.show_all()
         self.eventboxlessons.add(vbox)
 
-        
-        
+
 class QuitDialog(SimpleGladeApp):
-    def __init__(self, path="gvr_gtk.glade", root="QuitDialog", domain=app_name, **kwargs):
+
+    def __init__(self, root="QuitDialog", domain=app_name, **kwargs):
         path = os.path.join(glade_dir, path)
         SimpleGladeApp.__init__(self, path, root, domain, **kwargs)
 
@@ -487,9 +489,11 @@ class QuitDialog(SimpleGladeApp):
     
     def on_dialog_okbutton1_clicked(self, widget, *args):
         self.quit()
-    
+
+
 class AboutDialog(SimpleGladeApp):
-    def __init__(self, path="gvr_gtk.glade", root="AboutDialog", domain=app_name, **kwargs):
+
+    def __init__(self, root="AboutDialog", domain=app_name, **kwargs):
         path = os.path.join(glade_dir, path)
         SimpleGladeApp.__init__(self, path, root, domain, **kwargs)
 
@@ -502,32 +506,35 @@ class AboutDialog(SimpleGladeApp):
    
     def on_AboutDialog_delete_event(self, widget, *args):
         self.AboutDialog.destroy()
-   
-class FileDialog(gtk.FileChooserDialog):
-    def __init__(self,action='open',title='',path=os.path.expanduser('~'),ext='wld'):
-        #print "FileChooserDialog called",action,title,path,ext
+
+
+class FileDialog(Gtk.FileChooserDialog):
+
+    def __init__(self,action='open',title='', path=os.path.expanduser('~'),ext='wld'):
         if action == 'open':
-            act = gtk.FILE_CHOOSER_ACTION_OPEN
-            but = gtk.STOCK_OPEN
+            act = Gtk.FileChooserAction.OPEN
+            but = Gtk.STOCK_OPEN
         else:
-            act = gtk.FILE_CHOOSER_ACTION_SAVE
-            but = gtk.STOCK_SAVE
-        gtk.FileChooserDialog.__init__(self,title=title,action=act,
-                                  buttons=(gtk.STOCK_CANCEL,
-                                        gtk.RESPONSE_CANCEL,
-                                        but,
-                                        gtk.RESPONSE_OK))
+            act = Gtk.FileChooserAction.SAVE
+            but = Gtk.STOCK_SAVE
+
+        Gtk.FileChooserDialog.__init__(self, title=title,
+                                       action=act,
+                                       buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                                but, Gtk.ResponseType.OK))
+
         try:
             startpath = utils.PROGRAMSDIR
         except:
             startpath = os.path.join(utils.get_rootdir())
+
         self.set_current_folder(startpath)
-        wfilter = gtk.FileFilter()
+        wfilter = Gtk.FileFilter()
         wfilter.set_name(_("Worlds"))
         wfilter.add_pattern('*.wld')
         self.add_filter(wfilter)
 
-        pfilter = gtk.FileFilter()
+        pfilter = Gtk.FileFilter()
         pfilter.set_name(_("Programs"))
         pfilter.add_pattern('*.gvr')
         self.add_filter(pfilter)
@@ -537,8 +544,10 @@ class FileDialog(gtk.FileChooserDialog):
         else:
             self.set_filter(pfilter)
 
+
 class TextEditorWin(SimpleGladeApp):
-    def __init__(self, path="gvr_gtk.glade", root="EditorWin", domain=app_name,parent=None, **kwargs):
+
+    def __init__(self, root="EditorWin", domain=app_name,parent=None, **kwargs):
         path = os.path.join(glade_dir, path)
         self.logger = logging.getLogger("gvr_gtk.TextEditorWin")
         self.parent = parent
@@ -549,21 +558,25 @@ class TextEditorWin(SimpleGladeApp):
         self.loaded_txt = []
 
     def new(self):
-        """This implements a gtksourceview widget from Editors.py"""
+        """This implements a GtkSource widget from Editors.py"""
         #Called by SimpleGladeApp
-        # We use different editors on win32 as gtksourceview isn't available
+        # We use different editors on win32 as GtkSource isn't available
         # Editors can be Editors.py or Win_Editors.py, see import statement above
         self.editor = Editors.Editor(self.scrolledwindow1)
         self.observers = []
     
     def set_title(self,title):
         self.EditorWin.set_title(title)
+
     def get_all_text(self):
         try:
             txt = self.editor.get_all_text()
+
         except:
             txt = []
+
         return txt
+
     def set_text(self,path,txt):
         # path is the path from which the txt comes, we use it to determine
         # the path to save to.
@@ -573,18 +586,21 @@ class TextEditorWin(SimpleGladeApp):
         # We first set the text and then get it again because we compare it
         # against the text returnt by a call to get_all_text
         self.loaded_txt = self.get_all_text()
+
     def register_observer(self,obs):
         """Register a observer.
         Observer object must be a callable function which takes no arguments.
         Observer will be notified when this object gets destroyed.
         Needed by the worldbuilder and MainWin."""
         self.observers.append(obs)
+
     def _notify_observers(self):
         try:
             for obs in self.observers:
                 apply(obs)
         except Exception,info:
             self.logger.exception("Error in notify observers")
+
     def show_info(self):
         txt = "Sorry, not yet implemented\nUse the right mousebutton"
         Widgets.InfoDialog(txt=txt)
@@ -594,8 +610,10 @@ class TextEditorWin(SimpleGladeApp):
     
     # These two methods will be overridden by the child class.
     # It's only needed to connect the methods to the events in SimpleGladeApp
+
     def on_new1_activate(self,widget,*args):
         pass
+
     def on_open1_activate(self,widget,*args):
         pass
         
@@ -606,15 +624,18 @@ class TextEditorWin(SimpleGladeApp):
             # We first set the text and then get it again because we compare it
             # against the text returnt by a call to get_all_text
             self.loaded_txt = txt 
+
         if txt == []:
             Widgets.WarningDialog(txt=_("No content to save"))
             return
+
         if self.loaded_file_path:
             status = utils.save_file(self.loaded_file_path,txt)
             if status:
                Widgets.ErrorDialog(txt=status)
             else:
                 return True
+
         else:
             self.on_save_as1_activate(txt=txt)
     
@@ -622,14 +643,16 @@ class TextEditorWin(SimpleGladeApp):
         #print "save_as1_activate", txt
         dlg = FileDialog(action='save',title=_('Choose a file'),ext=str(self))
         response = dlg.run()
-        if response == gtk.RESPONSE_OK:
+        if response == Gtk.ResponseType.OK:
             path = dlg.get_filename()
-        elif response == gtk.RESPONSE_CANCEL:
+
+        elif response == Gtk.ResponseType.CANCEL:
             self.logger.debug('Closed, no files selected')
             dlg.destroy()
             return True
+
         dlg.destroy()
-        self.loaded_file_path=path
+        self.loaded_file_path = path
         if self.on_save1_activate(txt=txt):
             self.set_title(path)
   
@@ -641,24 +664,26 @@ class TextEditorWin(SimpleGladeApp):
             dlg = Widgets.YesNoDialog(txt=_("The editor's content is changed.\nDo you want to save it?"))
             response = dlg.run()
             dlg.destroy()
-            if response == gtk.RESPONSE_YES:
+
+            if response == Gtk.ResponseType.YES:
                 self.on_save_as1_activate(txt=edittxt)
+
             else:
                 return True
-   
+
     def on_cut1_activate(self, widget, *args):
         self.editor.srcview.emit('cut-clipboard')
-    
+
     def on_copy1_activate(self, widget, *args):
         self.editor.srcview.emit('copy-clipboard')
-    
+
     def on_paste1_activate(self, widget, *args):
         self.editor.srcview.emit('paste-clipboard')
-    
+
     def on_delete1_activate(self, widget, *args):
-        self.editor.srcview.emit('delete-from-cursor',gtk.DELETE_CHARS,1)
-                               
-    def on_print1_activate(self, widget, *args):                            
+        self.editor.srcview.emit('delete-from-cursor', Gtk.DeleteType.CHARS, 1)
+
+    def on_print1_activate(self, widget, *args):
         import time,tempfile
         head = '\nfile: %s\ndate: %s\n' % \
             (self.EditorWin.get_title().split(' ')[0],time.asctime())
@@ -667,13 +692,16 @@ class TextEditorWin(SimpleGladeApp):
         # create a secure tempfile, not really needed but I think you should
         # always try to avoid race conditions in any app.
         fd,fn = tempfile.mkstemp()
-        fo = os.fdopen(fd,'w')
+        fo = os.fdopen(fd, 'w')
+
         try:
             fo.write(text)
             fo.close()
+
         except Exception,info:
             print info
             return
+
         utils.send_to_printer(fn)
         os.remove(fn)
         
@@ -683,15 +711,21 @@ class TextEditorWin(SimpleGladeApp):
     def reset_highlight(self):
         self.editor.reset_highlight()
 
+
 class CodeTextEditorWin(TextEditorWin):
-    def __init__(self, path="gvr_gtk.glade", root="EditorWin", domain=app_name,parent=None, **kwargs):
+
+    def __init__(self, root="EditorWin", domain=app_name,parent=None, **kwargs):
         TextEditorWin.__init__(self,path,root,domain,parent,**kwargs)
+
         self.parent = parent
         self.EditorWin.remove(self.vbox4)
         # make sure we don't add > 1 children
+
         for child in self.parent.alignment19.get_children():
             self.parent.alignment19.remove(child)
+
         self.parent.alignment19.add(self.vbox4)
+
     def __str__(self):
         return 'gvr'
     
@@ -710,33 +744,45 @@ class CodeTextEditorWin(TextEditorWin):
         if not file:
             dlg = FileDialog(action='open',title=_("Open GvR program"),ext='gvr')
             response = dlg.run()
-            if response == gtk.RESPONSE_OK:
+            if response == Gtk.ResponseType.OK:
                 file = dlg.get_filename()
                 if os.path.splitext(file)[1] != '.gvr':
                     self.show_error(_("Selected path is not a program file"))
                     dlg.destroy()
                     return
-            elif response == gtk.RESPONSE_CANCEL:
+
+            elif response == Gtk.ResponseType.CANCEL:
                 self.logger.debug('Closed, no files selected')
                 dlg.destroy()
                 return
+
             dlg.destroy()
+
         txt = utils.load_file(file)
+
         if txt:
             self.set_text(file,txt)
+
         for b in ('execute','step','abort'):
             self.parent._set_sensitive_button(b,True)
+
         return
-       
+
+
 class WorldTextEditorWin(TextEditorWin):
-    def __init__(self, path="gvr_gtk.glade", root="EditorWin", domain=app_name,parent=None, **kwargs):
+
+    def __init__(self, root="EditorWin", domain=app_name,parent=None, **kwargs):
         TextEditorWin.__init__(self,path,root,domain,parent,**kwargs)
+
         self.parent = parent
         self.EditorWin.remove(self.vbox4)
         # make sure we don't add > 1 children
+
         for child in self.parent.alignment18.get_children():
             self.parent.alignment18.remove(child)
+
         self.parent.alignment18.add(self.vbox4)
+
     def __str__(self):
         return 'wld'
     
@@ -757,25 +803,31 @@ class WorldTextEditorWin(TextEditorWin):
         if not file:
             dlg = FileDialog(action='open',title=_("Open GvR world"),ext='wld')
             response = dlg.run()
-            if response == gtk.RESPONSE_OK:
+            if response == Gtk.ResponseType.OK:
                 file = dlg.get_filename()
                 if os.path.splitext(file)[1] != '.wld':
                     self.show_error(_("Selected path is not a world file"))
                     dlg.destroy()
                     return
-            elif response == gtk.RESPONSE_CANCEL:
+
+            elif response == Gtk.ResponseType.CANCEL:
                 self.logger.debug('Closed, no files selected')
                 dlg.destroy()
                 return
+
             dlg.destroy()
+
         txt = utils.load_file(file)
         if txt:
             self.set_text(file,txt)
             self.parent.on_button_reload()
+
         return
-        
+
+
 class SetLanguageDialog(SimpleGladeApp):
-    def __init__(self, path="gvr_gtk.glade", root="SetLanguageDialog", domain=app_name, **kwargs):
+
+    def __init__(self, root="SetLanguageDialog", domain=app_name, **kwargs):
         path = os.path.join(glade_dir, path)
         SimpleGladeApp.__init__(self, path, root, domain, **kwargs)
 
@@ -788,9 +840,11 @@ class SetLanguageDialog(SimpleGladeApp):
             choice = {'Catalan':'ca','Dutch':'nl','English':'en','French':'fr',\
                     'Norwegian':'no','Romenian':'ro','Spanish':'es','Italian':'it'}\
                     [Widgets.get_active_text(self.comboboxentry_language)]
+
         except Exception,info:
             print info
             choice = 'en'
+
         return choice
     
     def on_SetLanguageDialog_delete_event(self, widget, *args):
@@ -798,9 +852,11 @@ class SetLanguageDialog(SimpleGladeApp):
     
     def on_okbutton3_clicked(self, widget, *args):
         pass
-    
+
+
 class SetSpeedDialog(SimpleGladeApp):
-    def __init__(self, path="gvr_gtk.glade", root="SetSpeedDialog", domain=app_name, **kwargs):
+
+    def __init__(self, root="SetSpeedDialog", domain=app_name, **kwargs):
         path = os.path.join(glade_dir, path)
         SimpleGladeApp.__init__(self, path, root, domain, **kwargs)
 
@@ -826,7 +882,8 @@ class SetSpeedDialog(SimpleGladeApp):
     
 
 class SummaryDialog(SimpleGladeApp):
-    def __init__(self, path="gvr_gtk.glade", root="SummaryDialog", domain=app_name, **kwargs):
+
+    def __init__(self, root="SummaryDialog", domain=app_name, **kwargs):
         path = os.path.join(glade_dir, path)
         SimpleGladeApp.__init__(self, path, root, domain, **kwargs)
 
@@ -836,7 +893,8 @@ class SummaryDialog(SimpleGladeApp):
     def set_text(self,txt):
         # first line is also used as the title
         title = txt.split('\n')[0]
-        buffer = gtk.TextBuffer(table=None)
+        buffer = Gtk.TextBuffer()
+
         try:
             txt = ''.join(txt)
             utxt = unicode(txt)
@@ -844,12 +902,14 @@ class SummaryDialog(SimpleGladeApp):
             print "Failed to set text in source buffer"
             print info
             return
+
         self.SummaryDialog.set_title(title)
         buffer.set_text(utxt)
         self.textview1.set_buffer(buffer)
     
     def on_SummaryDialog_delete_event(self, widget, *args):
         self.SummaryDialog.destroy()
+
 
 def main():
     main_win = WindowXO()

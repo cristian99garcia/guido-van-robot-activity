@@ -95,21 +95,23 @@ import gvr_gtk # the frontend to use
 import GvrModel
 import GvrController
 
-def main(handle=None,parent=None):
+def main(handle=None, parent=None):
     module_logger.debug("main called with: %s,%s" % (handle,parent))
     # commandline arguments are used in developing only
     if len(sys.argv) == 3:
         wfile = sys.argv[1]
         pfile = sys.argv[2]
+
     else:
         wfile = ''
         pfile = ''
+
     try:
         # The abstraction layer on top of the gvr stuff
         model = GvrModel.GvrModel()
         # view must be the main GUI window
         if PLATFORM == 'XO':
-            view = gvr_gtk.WindowXO(handle,parent)# all the gui windows runs in one window on XO
+            view = gvr_gtk.WindowXO(handle, parent)# all the gui windows runs in one window on XO
         else:
             view = gvr_gtk.Window(parent)
         # the controller must have access to the model and view
@@ -118,10 +120,13 @@ def main(handle=None,parent=None):
         model.set_controller(contr)
         view.set_controller(contr)
         # Now start the GUI
-        contr.start_view(wfile,pfile)# args are optional
+        contr.start_view(wfile, pfile)# args are optional
+
     except Exception:
         module_logger.exception("Toplevel error")
         return 1
 
+
 if __name__ == "__main__":
     main()
+

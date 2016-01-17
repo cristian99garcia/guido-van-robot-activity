@@ -27,91 +27,97 @@
 
 
 E_DEBUG = 0
-import os,sys
+import os
 import utils
-import pygtk
 
-#this is needed for py2exe
-if sys.platform == 'win32':
-    pass
-else:
-    #not win32, ensure version 2.0 of pygtk is imported
-    pygtk.require('2.0')
+from gi.repository import Gtk
 
-import gtk
 
 class Editor:
+
     """Wraps a textview widget and adds a few abstraction methods."""
+
     def __init__(self,parent,title=''):
         self.parent = parent
-        
-        self.frame = gtk.Frame()
-        
-        self.txttagtable = gtk.TextTagTable()
-        self.txtbuffer = gtk.TextBuffer(table=self.txttagtable)
-        
+
+        self.frame = Gtk.Frame()
+
+        self.txttagtable = Gtk.TextTagTable()
+        self.txtbuffer = Gtk.TextBuffer.new(self.txttagtable)
+
         self.tag_h = self.txtbuffer.create_tag(background='lightblue')
-        
-        self.txtview = gtk.TextView(buffer=self.txtbuffer)
-        self.txtview.set_border_window_size(gtk.TEXT_WINDOW_LEFT, 20)                
+
+        self.txtview = Gtk.TextView.new_with_buffer(self.txtbuffer)
+        self.txtview.set_border_window_size(Gtk.TextWindowType.LEFT, 20)
         self.txtview.connect("expose_event", self.line_numbers_expose)
-        
+
         self.parent.add(self.txtview)
         self.parent.show_all()
-        
+
         self.old_start_iter = None
 
     def get_all_text(self):
         """Return all text from the widget"""
         startiter = self.txtbuffer.get_start_iter()
         enditer = self.txtbuffer.get_end_iter()
-        txt = self.txtbuffer.get_text(startiter,enditer)
+        txt = self.txtbuffer.get_text(startiter, enditer)
+
         if not txt:
             return []
+
         if '\n' in txt:
             txt = txt.split('\n')
+
         else:# assuming a line without a end of line
             txt = [txt]
+
         return txt
         
     def set_text(self,txt):
         """Load a text in the widget"""
-        if E_DEBUG: print self.__class__,'set_text',txt
+        if E_DEBUG:
+            print self.__class__, 'set_text', txt
+
         try:
             txt = ''.join(txt)
             utxt = unicode(txt)
+
         except Exception,info:
             print "Failed to set text in source buffer"
             print info
+
             return
+
         self.txtbuffer.set_text(utxt)
-        
+
     def set_highlight(self,line):
         """Highlight the line in the editor"""
         if self.old_start_iter:
-            self.txtbuffer.remove_tag(self.tag_h,self.old_start_iter,self.old_end_iter)
+            self.txtbuffer.remove_tag(self.tag_h, self.old_start_iter, self.old_end_iter)
+
         end_iter = self.txtbuffer.get_iter_at_line(line)
         end_iter.forward_to_line_end()  
         start_iter = self.txtbuffer.get_iter_at_line(line)
-        self.txtbuffer.apply_tag(self.tag_h,start_iter,end_iter)
-        self.old_start_iter,self.old_end_iter = start_iter,end_iter
-    
+        self.txtbuffer.apply_tag(self.tag_h, start_iter, end_iter)
+        self.old_start_iter, self.old_end_iter = start_iter, end_iter
+
     def reset_highlight(self):
         self.set_highlight(1)
-    
+
     ##### taken from pygtk tutorial example ######################
     def line_numbers_expose(self, widget, event, user_data=None):
         text_view = widget
-  
+
         # See if this expose is on the line numbers window
-        left_win = text_view.get_window(gtk.TEXT_WINDOW_LEFT)
-        
+        left_win = text_view.get_window(Gtk.TextWindowType.LEFT)
+
         if event.window == left_win:
-            type = gtk.TEXT_WINDOW_LEFT
+            type = Gtk.TextWindowType.LEFT
             target = left_win
+
         else:
             return False
-        
+
         first_y = event.area.y
         last_y = first_y + event.area.height
 
@@ -123,11 +129,11 @@ class Editor:
         count = self.get_lines(first_y, last_y, pixels, numbers)
         # Draw fully internationalized numbers!
         layout = widget.create_pango_layout("")
-  
+
         for i in range(count):
             x, pos = text_view.buffer_to_window_coords(type, 0, pixels[i])
             numbers[i] = numbers[i] + 1
-            str = "%d" % numbers[i] 
+            str = "%d" % numbers[i]
             layout.set_text(str)
             widget.style.paint_layout(target, widget.state, False,
                                       None, widget, None, 2, pos + 2, layout)
@@ -151,10 +157,11 @@ class Editor:
             line_num = iter.get_line()
             numbers.append(line_num)
             count += 1
+
             if (y + height) >= last_y:
                 break
+
             iter.forward_line()
 
         return count
-        
-        
+

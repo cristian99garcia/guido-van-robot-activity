@@ -23,6 +23,7 @@ _WDEBUG = 0
 import os
 import sys
 import logging
+import gvr_gtk_glade
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -30,16 +31,12 @@ from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GdkPixbuf
 
-from SimpleGtk3GladeApp import bindtextdomain
-from SimpleGtk3GladeApp import SimpleGladeApp
+from sugar3.graphics.toolbutton import ToolButton
 
 app_name = "gvr_gtk"
 import utils
 
 from worldMap import lookup_dir_dict
-##locale_dir = utils.LOCALEDIR 
-##bindtextdomain(app_name, locale_dir)
-#utils.set_locale()
 
 glade_dir = utils.FRONTENDDIR
 
@@ -61,13 +58,13 @@ class WarningDialog(Gtk.MessageDialog):
 
 class ErrorDialog(WarningDialog):
 
-    def __init__(self,txt):
+    def __init__(self, txt):
         WarningDialog.__init__(self, parent=None, flags=Gtk.DialogFlags.MODAL, type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.CLOSE, message_format='', txt=txt)
 
 
 class InfoDialog(WarningDialog):
 
-    def __init__(self,txt):
+    def __init__(self, txt):
         WarningDialog.__init__(self,parent=None, flags=Gtk.DialogFlags.MODAL, type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.CLOSE, message_format='', txt=txt)
 
 
@@ -77,7 +74,7 @@ class YesNoDialog(Gtk.MessageDialog):
         Gtk.MessageDialog.__init__(self, parent=parent, flags=flags, type=type, buttons=buttons, message_format=message_format)
 
         #self.connect("response", self.response)
-        self.set_markup('%s%s%s' % ('<b>',txt,'</b>'))
+        self.set_markup('%s%s%s' % ('<b>', txt, '</b>'))
         self.show()
 
 
@@ -129,8 +126,8 @@ class Canvas(Gtk.DrawingArea):
         self.width  = 0 # updated in size-allocate handler
         self.height = 0 # idem
         self.connect('size-allocate', self._on_size_allocate)
-        self.connect('expose-event',  self._on_expose_event)
-        self.connect('realize',       self._on_realize)
+        self.connect('draw',          self._on_expose_event)
+        ##self.connect('realize',       self._on_realize)
         self._load_images()
         # image sizes
         self.spi_x = self.splash_pixbuf.get_width()
@@ -169,27 +166,27 @@ class Canvas(Gtk.DrawingArea):
         self.robot_w_pixbuf = GdkPixbuf.Pixbuf.new_from_file(os.path.join(utils.PIXMAPSDIR,'guido_w.png'))
 
     def _on_realize(self, widget):
-        cmap = widget.get_colormap()
-        self.WHITE = cmap.alloc_color('white')
-        self.BLACK = cmap.alloc_color('black')
-        self.RED = cmap.alloc_color('red')
-        self.BLUE = cmap.alloc_color('blue')
+        ##cmap = widget.get_colormap()
+        ##self.WHITE = cmap.alloc_color('white')
+        ##self.BLACK = cmap.alloc_color('black')
+        ##self.RED = cmap.alloc_color('red')
+        ##self.BLUE = cmap.alloc_color('blue')
         ##self.gc = widget.get_window().new_gc()
-        self.pangolayout = widget.create_pango_layout('')
-        self.pangolayout_beeper = widget.create_pango_layout('')
+        ##self.pangolayout = widget.create_pango_layout('')
+        ##self.pangolayout_beeper = widget.create_pango_layout('')
         # create a font description
-        font_desc = pango.FontDescription('Serif 8')
+        ##font_desc = pango.FontDescription('Serif 8')
         # tell the layout which font description to use
-        self.pangolayout.set_font_description(font_desc)
+        ##self.pangolayout.set_font_description(font_desc)
         # and one for the beepers
 
-        if utils.platform == 'XO':
-            fn_size = '8'
-        else:
-            fn_size = '12'
+        ##if utils.platform == 'XO':
+        ##    fn_size = '8'
+        ##else:
+        ##    fn_size = '12'
 
-        font_desc = pango.FontDescription('Serif ' + fn_size)
-        self.pangolayout_beeper.set_font_description(font_desc)
+        ##font_desc = pango.FontDescription('Serif ' + fn_size)
+        ##self.pangolayout_beeper.set_font_description(font_desc)
 
         return True
         
@@ -201,15 +198,17 @@ class Canvas(Gtk.DrawingArea):
         self.screenY = self.height/self.square
         return True
         
-    def _on_expose_event(self, widget, event):
+    def _on_expose_event(self, widget, context):
         # This is where the drawing takes place
         for func in self.stuff_to_draw:
             apply(func,(widget,))
 
         return True
 
-    def _fill_background(self,widget,col=''):
-        if not col: col = self.WHITE
+    def _fill_background(self, widget, col=''):
+        ##if not col:
+        ##    col = self.WHITE
+
         ##self.gc.set_foreground(col)
         filled = 1
         ##widget.window.draw_rectangle(self.gc, filled, 0, 0, self.width, self.height)
@@ -695,14 +694,14 @@ class Timer:
         self.interval = interval 
 
 
-class RobotDialog(SimpleGladeApp):
+class RobotDialog(gvr_gtk_glade.RobotDialog):
 
-    def __init__(self, path="gvr_gtk.glade", root="RobotDialog", domain=app_name, **kwargs):
-        path = os.path.join(glade_dir, path)
-        SimpleGladeApp.__init__(self, path, root, domain, **kwargs)
+    def __init__(self):
+        gvr_gtk_glade.RobotDialog.__init__(self)
 
     def new(self):
-        pass
+        self.connect("delete-event", self.on_RobotDialog_delete_event)
+        self.cancelbutton4.connect("clicked", self.on_RobotDialog_delete_event)
     
     def get_choice(self):
         return (self.entry_x.get_text(),
@@ -751,7 +750,6 @@ class StatusBar:
 class WebToolbar(Gtk.Toolbar):
 
     def __init__(self,browser):
-        from sugar3.graphics.toolbutton import ToolButton
         self.logger = logging.getLogger("gvr.Widgets.WebToolbar")
 
         Gtk.Toolbar.__init__(self)
@@ -769,11 +767,13 @@ class WebToolbar(Gtk.Toolbar):
         self.insert(self._forw, -1)                                             
         self._forw.show() 
     
-    def _go_forward_cb(self,button):
-        self._browser.web_navigation.goForward()
-        
-    def _go_back_cb(self,button):
-        self._browser.web_navigation.goBack()  
+    def _go_forward_cb(self, button):
+        if self._browser.can_go_forward():
+            self._browser.go_forward()
+
+    def _go_back_cb(self, button):
+        if self._browser.can_go_back():
+            self._browser.go_back()
 
 
 def get_active_text(combobox):
@@ -784,5 +784,6 @@ def get_active_text(combobox):
     active = combobox.get_active()
     if active < 0:
         return None
-    return model[active][0]  
+
+    return model[active][0]
 

@@ -14,7 +14,6 @@ class QuitDialog(Gtk.Dialog):
         self.set_modal(True)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        ##self.connect("delete-event", self.on_QuitDialog_delete_event)
 
         self.dialog_vbox1 = Gtk.VBox()
         self.vbox.pack_start(self.dialog_vbox1, True, True, 0)
@@ -35,11 +34,9 @@ class QuitDialog(Gtk.Dialog):
         self.dialog_vbox1.pack_end(self.dialog_action_area1, False, False, 2)
 
         self.cancelbutton1 = Gtk.Button.new_from_stock(Gtk.STOCK_CANCEL)
-        ##self.cancelbutton1.connect("cancel", self.on_QuitDialog_delete_event)
         self.dialog_action_area1.add(self.cancelbutton1)
 
         self.okbutton1 = Gtk.Button.new_from_stock(Gtk.STOCK_OK)
-        ##self.okbutton1.connect("clicked", self.on_dialog_okbutton1_clicked)
         self.dialog_action_area1.add(self.okbutton1)
 
         self.show_all()
@@ -53,7 +50,6 @@ class AboutDialog(Gtk.AboutDialog):
         self.set_title(_("Abort Gvr"))
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        ##self.connect("delete-event", self.on_AboutDialog_delete_event)
 
         self.dialog_vbox2 = Gtk.VBox()
         self.vbox.pack_start(self.dialog_vbox2, True, True, 0)
@@ -80,7 +76,6 @@ class AboutDialog(Gtk.AboutDialog):
         self.dialog_vbox2.pack_end(self.dialog_action_area2, False, False, 0)
 
         self.okbutton2 = Gtk.Button.new_from_stock(Gtk.STOCK_OK)
-        ##self.okbutton2.connect("clicked", self.on_AboutDialog_delete_event)
         self.dialog_action_area2.add(self.okbutton2)
 
         self.show_all()
@@ -114,14 +109,13 @@ class FileDialog(Gtk.FileChooserDialog):
         self.show_all()
 
 
-class EditorWin(Gtk.Window):
+class EditorWin(Gtk.VBox):
 
     def __init__(self):
-        Gtk.Window.__init__(self)
+        Gtk.VBox.__init__(self)
 
         self.set_size_request(300, 500)
         self.set_title(_("Gvr - Editor"))
-        ##self.connect("delete-event", self.on_TextEditorWin_delete_event)
 
         self.vbox4 = Gtk.VBox()
         self.add(self.vbox4)
@@ -137,25 +131,20 @@ class EditorWin(Gtk.Window):
         self.menuitem5.set_submenu(self.menuitem5_menu)
 
         self.new1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_NEW)
-        ##self.new1.connect("activate", self.on_new1_activate)
         self.menuitem5_menu.append(self.new1)
 
         self.open1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_OPEN)
-        ##self.open1.connect("activate", self.on_open1_activate)
         self.menuitem5_menu.append(self.open1)
 
         self.save1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_SAVE)
-        ##self.save1.connect("activate", self.on_save1_activate)
         self.menuitem5_menu.append(self.save1)
 
         self.save_as1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_SAVE_AS)
-        ##self.save_as1.connect("activate", self.on_save_as1_activate)
         self.menuitem5_menu.append(self.save_as1)
 
         self.menuitem5_menu.append(Gtk.SeparatorMenuItem())
 
         self.print1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PRINT)
-        ##self.print1.connect("activate", self.on_print1_activate)
         self.menuitem5_menu.append(self.print1)
 
         self.menuitem6 = Gtk.MenuItem(_("_Edit"))
@@ -166,19 +155,15 @@ class EditorWin(Gtk.Window):
         self.menuitem6.set_submenu(self.menuitem6_menu)
 
         self.cut1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CUT)
-        ##self.cut1.connect("activate", self.on_cut1_activate)
         self.menuitem6_menu.append(self.cut1)
 
         self.copy1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_COPY)
-        ##self.copy1.connect("activate", self.on_copy1_activate)
         self.menuitem6_menu.append(self.copy1)
 
         self.paste1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PASTE)
-        ##self.paste1.connect("activate", self.on_paste1_activate)
         self.menuitem6_menu.append(self.paste1)
 
         self.delete1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CUT)
-        ##self.delete1.connect("activate", self.on_delete1_activate)
         self.menuitem6_menu.append(self.delete1)
 
         self.scrolledwindow1 = Gtk.ScrolledWindow()
@@ -199,7 +184,6 @@ class SetLanguageDialog(Gtk.Dialog):
 
         self.set_title(_("Set language"))
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        ##self.connect("delete-event", self.on_SetLanguageDialog_delete_event)
 
         self.dialog_vbox4 = Gtk.VBox()
         self.vbox.pack_start(self.dialog_vbox4, True, True, 0)
@@ -231,11 +215,9 @@ class SetLanguageDialog(Gtk.Dialog):
         self.vbox.pack_end(self.dialog_action_area4, False, False, 0)
 
         self.cancelbutton2 = Gtk.Button.new_from_stock(Gtk.STOCK_CANCEL)
-        ##self.cancelbutton2.connect("clicked", self.on_SetLanguageDialog_delete_event)
         self.dialog_action_area4.add(self.cancelbutton2)
 
         self.okbutton4 = Gtk.Button.new_from_stock(Gtk.STOCK_OK)
-        ##self.okbutton4.connect("clicked", self.on_okbutton3_clicked)
         self.dialog_action_area4.add(self.okbutton4)
 
         self.show_all()
@@ -248,7 +230,6 @@ class SetSpeedDialog(Gtk.Dialog):
 
         self.set_title(_("Robot Speed"))
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        ##self.connect("delete-event", self.on_SetSpeedDialog_delete_event)
 
         self.dialog_vbox5 = Gtk.VBox()
         self.vbox.pack_start(self.dialog_vbox5, True, True, 0)
@@ -276,11 +257,9 @@ class SetSpeedDialog(Gtk.Dialog):
         self.vbox.pack_end(self.dialog_action_area5, False, False, 0)
 
         self.cancelbutton3 = Gtk.Button.new_from_stock(Gtk.STOCK_CANCEL)
-        ##self.cancelbutton3.connect("clicked", self.on_SetSpeedDialog_delete_event)
         self.dialog_action_area5.add(self.cancelbutton3)
 
         self.okbutton5 = Gtk.Button.new_from_stock(Gtk.STOCK_CANCEL)
-        ##self.okbutton5.connect("clicked", self.on_okbutton4_clicked)
         self.dialog_action_area5.add(self.okbutton5)
 
         self.show_all()
@@ -294,7 +273,6 @@ class SummaryDialog(Gtk.Dialog):
         self.set_size_request(400, 400)
         self.set_title(_("Guido van Robot Programming Summary"))
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        ##self.connect("delete-event", self.on_SummaryDialog_delete_event)
 
         self.dialog_vbox6 = Gtk.VBox()
         self.vbox.pack_start(self.dialog_vbox6, True, True, 0)
@@ -313,7 +291,6 @@ class SummaryDialog(Gtk.Dialog):
         self.vbox.pack_end(self.hbuttonbox2, False, False, 0)
 
         self.closebutton1 = Gtk.Button.new_from_stock(Gtk.STOCK_CLOSE)
-        ##self.closebutton1.connect("clicked", on_SummaryDialog_delete_event)
         self.hbuttonbox2.add(self.closebutton1)
 
         self.show_all()
@@ -328,7 +305,6 @@ class RobotDialog(Gtk.Dialog):
         self.set_default_size(450, 200)
         self.set_title(_("Guido van Robot - Robot arguments"))
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        ##self.connect("delete-event", self.on_RobotDialog_delete_event)
 
         self.dialog_vbox7 = Gtk.VBox()
         self.vbox.pack_start(self.dialog_vbox7, True, True, 0)
@@ -385,7 +361,6 @@ class RobotDialog(Gtk.Dialog):
         self.dialog_vbox7.pack_end(self.dialog_action_area7, False, False, 0)
 
         self.cancelbutton4 = Gtk.Button.new_from_stock(Gtk.STOCK_CANCEL)
-        ##self.cancelbutton4.connect("clicked", self.on_RobotDialog_delete_event)
         self.dialog_action_area7.add(self.cancelbutton4)
 
         self.okbutton6 = Gtk.Button.new_from_stock(Gtk.STOCK_OK)

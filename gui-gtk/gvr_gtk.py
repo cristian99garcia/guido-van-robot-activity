@@ -51,58 +51,57 @@ class Globals(super):
     speed = _('Medium')
 
 
-class Window(gvr_gtk_glade.window_main):
+class WindowXO(gvr_gtk_glade.window_main):
 
-    def __init__(self, parent=None, **kwargs):
+    def __init__(self, handle, parent=None, **kwargs):
         gvr_gtk_glade.window_main.__init__(self)
 
-        self.logger = logging.getLogger("gvr_gtk.Window")
+        self._parent = parent
+        self._parent.set_canvas(self)
+        self.logger = logging.getLogger("gvr.gvr_gtk.WindowXO")
 
-        # set the localized language summary in the language reference tab
-        # first line is also used as the title
-        txt = Text.OnRefText
-        #title = txt.split('\n')[0]
-        buffer = Gtk.TextBuffer()
+        # Get and set the sugar toolbar
+        toolbarbox = ToolbarBox()
+        self._parent.set_toolbar_box(toolbarbox)
+        toolbarbox.show_all()
 
-        try:
-            txt = ''.join(txt)
-            utxt = unicode(txt)
+        toolbar = toolbarbox.toolbar
 
-        except Exception,info:
-            self.logger.exception("Failed to set reference text in source buffer")
-            return
+        separator = Gtk.SeparatorToolItem()
+        separator.props.draw = False
+        separator.set_expand(True)
+        toolbar.insert(separator, -1)
 
-        buffer.set_text(utxt)
-        self.textview_languagereference.set_buffer(buffer)
-        self.textview_languagereference.show_all()
-        # and set the intro text
-        txt = Text.OnIntroText
-        buffer = Gtk.TextBuffer()
+        stop_button = StopButton(self._parent)
+        toolbar.insert(stop_button, -1)
 
-        try:
-            txt = ''.join(txt)
-            utxt = unicode(txt)
+        toolbar.show_all()
 
-        except Exception,info:
-            self.logger.exception("Failed to set intro text in source buffer")
-            return
+        # remove seperator and 'quit' menu items as we have the sugar toolbox
+        self.imagemenuitem49.destroy()
 
-        buffer.set_text(utxt)
-        self.textview_intro.set_buffer(buffer)
-        self.textview_intro.show_all()
-        # check if we should show the intro text on startup.
+        # Embed webview as the lessons display
+        self.WV = WebView()
 
-        try:
-            if utils.RCDICT['default']['intro'].lower() == 'yes':
-                self.notebook1.set_current_page(-1)
-                utils.setRcEntry('intro', 'no')
+        file = os.path.join(utils.get_rootdir(), 'docs', 'lessons', utils.get_locale()[:2], 'html', 'index.html')
+        self.logger.debug("Looking for the lessons in %s" % file)
+        if not os.path.exists(file):
+            self.logger.debug("%s not found, loading default English lessons" % file)
+            file = os.path.join(utils.get_rootdir(), 'docs', 'lessons', 'en', 'html', 'index.html')
 
-        except KeyError:
-            pass
+        self.WV.open('file:///%s' % file)
+
+        vbox = Gtk.VBox(False, 4)
+        vbox.pack_start(Widgets.WebToolbar(self.WV), False, False, 2)
+        vbox.pack_start(self.WV, True, True, 2)
+        vbox.show_all()
+        self.eventboxlessons.add(vbox)
 
         self.new()
+        self.show_all()
 
     def new(self):
+        self.connect_signals()
         self.statusbar = Widgets.StatusBar(self.statusbar7)
         self._setup_canvas()
         # these calls will add the editors to the GUI
@@ -110,6 +109,21 @@ class Window(gvr_gtk_glade.window_main):
         self.new_program_editor()
         self._set_sensitive_button('all',True)
         self.timerinterval = 150
+
+    def connect_signals(self):
+        self.menuitem48.connect("activate", self.on_open_worldbuilder1_activate)
+        self.imagemenuitem49.connect("activate", self.on_quit1_activate)
+        self.imagemenuitem50.connect("activate", self.on_set_speed1_activate)
+        ##self.imagemenuitem51.connect("activate", self.on_set_language1_activate)
+        self.imagemenuitem52.connect("activate", self.on_gvr_lessons1_activate)
+        self.imagemenuitem54.connect("activate", self.on_gvr_worldbuilder1_activate)
+        self.imagemenuitem55.connect("activate", self.on_about1_activate)
+        self.button_reload.connect("clicked", self.on_button_reload)
+        self.button_step.connect("clicked", self.on_button_step)
+        self.button_execute.connect("clicked", self.on_button_execute)
+        self.button_abort.connect("clicked", self.on_button_abort)
+        self.statusbar7.connect("text-pushed", self.on_statusbar1_text_pushed)
+        self.statusbar7.connect("text-popped", self.on_statusbar1_text_popped)
 
     def new_world_editor(self):
         self.world_editor = WorldTextEditorWin(parent=self)
@@ -392,74 +406,18 @@ class Window(gvr_gtk_glade.window_main):
         pass
 
 
-class WindowXO(gvr_gtk_glade.window_main):
-
-    def __init__(self, handle, parent=None, **kwargs):
-        gvr_gtk_glade.window_main.__init__(self)
-
-        self._parent = parent
-        self._parent.set_canvas(self)
-        self.logger = logging.getLogger("gvr.gvr_gtk.WindowXO")
-
-        # Get and set the sugar toolbar
-        toolbarbox = ToolbarBox()
-        self._parent.set_toolbar_box(toolbarbox)
-        toolbarbox.show_all()
-
-        toolbar = toolbarbox.toolbar
-
-        separator = Gtk.SeparatorToolItem()
-        separator.props.draw = False
-        separator.set_expand(True)
-        toolbar.insert(separator, -1)
-
-        stop_button = StopButton(self._parent)
-        toolbar.insert(stop_button, -1)
-
-        toolbar.show_all()
-
-        # then we remove the main frame from parent
-        self._frame = self.frame5
-        self.window_main.remove(self._frame)
-        # set as main window below the toolbox
-        self._parent.set_canvas(self._frame)
-        self._frame.show()
-        
-        # remove seperator and 'quit' menu items as we have the sugar toolbox 
-        self.separatormenuitem14.destroy()
-        self.imagemenuitem49.destroy()
-        
-        # Embed webview as the lessons display
-        self.WV = WebView()
-
-        file = os.path.join(utils.get_rootdir(), 'docs', 'lessons', utils.get_locale()[:2], 'html', 'index.html')
-        self.logger.debug("Looking for the lessons in %s" % file)
-        if not os.path.exists(file):
-            self.logger.debug("%s not found, loading default English lessons" % file)
-            file = os.path.join(utils.get_rootdir(), 'docs', 'lessons', 'en', 'html', 'index.html')
-
-        self.WV.open('file:///%s' % file)
-
-        vbox = Gtk.VBox(False, 4)
-        vbox.pack_start(Widgets.WebToolbar(self.WV), False, False, 2)
-        vbox.pack_start(self.WV, True, True, 2)
-        vbox.show_all()
-        self.eventboxlessons.add(vbox)
-
-        self.show_all()
-
-
 class QuitDialog(gvr_gtk_glade.QuitDialog):
 
     def __init__(self):
         gvr_gtk_glade.QuitDialog.__init__(self)
 
     def new(self):
-        pass
-    
+        self.cancelbutton1.connect("cancel", self.on_QuitDialog_delete_event)
+        self.okbutton1.connect("clicked", self.on_dialog_okbutton1_clicked)
+
     def on_QuitDialog_delete_event(self, widget, *args):
-        self.QuitDialog.destroy()
-    
+        self.destroy()
+
     def on_dialog_okbutton1_clicked(self, widget, *args):
         self.quit()
 
@@ -474,10 +432,12 @@ class AboutDialog(gvr_gtk_glade.AboutDialog):
         txt = version.ABOUT_TEXT % app_version
         self.text_label.set_text(txt)
         self.text_label.show()
-        self.AboutDialog.show()
+        self.show_all()
+
+        self.okbutton2.connect("clicked", self.on_AboutDialog_delete_event)
 
     def on_AboutDialog_delete_event(self, widget, *args):
-        self.AboutDialog.destroy()
+        self.destroy()
 
 
 class FileDialog(Gtk.FileChooserDialog):
@@ -509,7 +469,7 @@ class FileDialog(Gtk.FileChooserDialog):
         pfilter.set_name(_("Programs"))
         pfilter.add_pattern('*.gvr')
         self.add_filter(pfilter)
-        
+
         if ext == 'wld':
             self.set_filter(wfilter)
 
@@ -519,7 +479,7 @@ class FileDialog(Gtk.FileChooserDialog):
 
 class TextEditorWin(gvr_gtk_glade.EditorWin):
 
-    def __init__(self):
+    def __init__(self, parent=None):
         gvr_gtk_glade.EditorWin.__init__(self)
         # loaded_file_path is used to determine the path to save to
         # It's set by set_text and save_as* methods.
@@ -534,9 +494,23 @@ class TextEditorWin(gvr_gtk_glade.EditorWin):
         # Editors can be Editors.py or Win_Editors.py, see import statement above
         self.editor = Editors.Editor(self.scrolledwindow1)
         self.observers = []
-    
-    def set_title(self,title):
-        self.EditorWin.set_title(title)
+
+        self.connect_signals()
+
+    def connect_signals(self):
+        self.new1.connect("activate", self.on_new1_activate)
+        self.open1.connect("activate", self.on_open1_activate)
+        self.save1.connect("activate", self.on_save1_activate)
+        self.save_as1.connect("activate", self.on_save_as1_activate)
+        self.print1.connect("activate", self.on_print1_activate)
+        self.cut1.connect("activate", self.on_cut1_activate)
+        self.copy1.connect("activate", self.on_copy1_activate)
+        self.paste1.connect("activate", self.on_paste1_activate)
+        self.delete1.connect("activate", self.on_delete1_activate)
+
+    def set_title(self, title):
+        ##self.set_title(title)
+        pass
 
     def get_all_text(self):
         try:
@@ -581,14 +555,14 @@ class TextEditorWin(gvr_gtk_glade.EditorWin):
 
     def on_open1_activate(self,widget,*args):
         pass
-        
+
     def on_save1_activate(self, widget=None, txt=[]):
         if txt == []:
             txt = self.get_all_text()
             # used to compare the contents of the editor when quiting
             # We first set the text and then get it again because we compare it
             # against the text returnt by a call to get_all_text
-            self.loaded_txt = txt 
+            self.loaded_txt = txt
 
         if txt == []:
             Widgets.WarningDialog(txt=_("No content to save"))
@@ -603,7 +577,7 @@ class TextEditorWin(gvr_gtk_glade.EditorWin):
 
         else:
             self.on_save_as1_activate(txt=txt)
-    
+
     def on_save_as1_activate(self, widget=None, txt=[]):
         #print "save_as1_activate", txt
         dlg = FileDialog(action='save',title=_('Choose a file'),ext=str(self))
@@ -620,7 +594,7 @@ class TextEditorWin(gvr_gtk_glade.EditorWin):
         self.loaded_file_path = path
         if self.on_save1_activate(txt=txt):
             self.set_title(path)
-  
+
     def on_quit2_activate(self, widget=None, *args):
         edittxt = self.get_all_text()
         #print 'edittxt',edittxt
@@ -650,7 +624,7 @@ class TextEditorWin(gvr_gtk_glade.EditorWin):
 
     def on_print1_activate(self, widget, *args):
         import time, tempfile
-        head = '\nfile: %s\ndate: %s\n' % (self.EditorWin.get_title().split(' ')[0],time.asctime())
+        head = '\nfile: %s\ndate: %s\n' % (self.get_title().split(' ')[0],time.asctime())
         txt = '\n'.join(self.get_all_text())
         text = '-'*79 + '\n' + head + '-'*79 + '\n' + txt
         # create a secure tempfile, not really needed but I think you should
@@ -668,21 +642,21 @@ class TextEditorWin(gvr_gtk_glade.EditorWin):
 
         utils.send_to_printer(fn)
         os.remove(fn)
-        
+
     def on_about2_activate(self,*args):
         pass
-    
+
     def reset_highlight(self):
         self.editor.reset_highlight()
 
 
 class CodeTextEditorWin(TextEditorWin):
 
-    def __init__(self, root="EditorWin", domain=app_name,parent=None, **kwargs):
-        TextEditorWin.__init__(self,path,root,domain,parent,**kwargs)
+    def __init__(self, parent, **kwargs):
+        TextEditorWin.__init__(self)
 
         self.parent = parent
-        self.EditorWin.remove(self.vbox4)
+        self.remove(self.vbox4)
         # make sure we don't add > 1 children
 
         for child in self.parent.alignment19.get_children():
@@ -727,13 +701,10 @@ class CodeTextEditorWin(TextEditorWin):
 
 class WorldTextEditorWin(TextEditorWin):
 
-    def __init__(self, root="EditorWin", domain=app_name,parent=None, **kwargs):
-        TextEditorWin.__init__(self,path,root,domain,parent,**kwargs)
+    def __init__(self, parent, **kwargs):
+        TextEditorWin.__init__(self, parent)
 
         self.parent = parent
-        self.EditorWin.remove(self.vbox4)
-        # make sure we don't add > 1 children
-
         for child in self.parent.alignment18.get_children():
             self.parent.alignment18.remove(child)
 
@@ -777,8 +748,11 @@ class SetLanguageDialog(gvr_gtk_glade.SetLanguageDialog):
     def __init__(self):
         gvr_gtk_glade.SetLanguageDialog.__init__(self)
 
+        self.new()
+
     def new(self):
-        pass
+        self.okbutton4.connect("clicked", self.on_okbutton3_clicked)
+        self.cancelbutton2.connect("clicked", self.on_SetLanguageDialog_delete_event)
 
     def get_choice(self):
         try:
@@ -802,7 +776,7 @@ class SetLanguageDialog(gvr_gtk_glade.SetLanguageDialog):
         return choice
     
     def on_SetLanguageDialog_delete_event(self, widget, *args):
-        self.SetLanguageDialog.destroy()
+        self.destroy()
     
     def on_okbutton3_clicked(self, widget, *args):
         pass
@@ -825,7 +799,10 @@ class SetSpeedDialog(gvr_gtk_glade.SetSpeedDialog):
 
         choice = options[Globals.speed]
         self.comboboxentry_speed.set_active(choice)
-    
+
+        self.cancelbutton3.connect("clicked", self.on_SetSpeedDialog_delete_event)
+        self.okbutton5.connect("clicked", self.on_okbutton4_clicked)
+
     def get_choice(self):
         try:
             txt = Widgets.get_active_text(self.comboboxentry_speed)
@@ -857,9 +834,11 @@ class SummaryDialog(gvr_gtk_glade.SummaryDialog):
     def __init__(self):
         gvr_gtk_glade.SummaryDialog.__init__(self)
 
+        self.new()
+
     def new(self):
-        pass
-    
+        self.closebutton1.connect("clicked", on_SummaryDialog_delete_event)
+
     def set_text(self,txt):
         # first line is also used as the title
         title = txt.split('\n')[0]
@@ -879,7 +858,7 @@ class SummaryDialog(gvr_gtk_glade.SummaryDialog):
         self.textview1.set_buffer(buffer)
     
     def on_SummaryDialog_delete_event(self, widget, *args):
-        self.SummaryDialog.destroy()
+        self.destroy()
 
 
 def main():

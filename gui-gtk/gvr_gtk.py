@@ -91,9 +91,12 @@ class WindowXO(gvr_gtk_glade.window_main):
 
         self.WV.open('file:///%s' % file)
 
+        scroll = Gtk.ScrolledWindow()
+        scroll.add(self.WV)
+
         vbox = Gtk.VBox(False, 4)
         vbox.pack_start(Widgets.WebToolbar(self.WV), False, False, 2)
-        vbox.pack_start(self.WV, True, True, 2)
+        vbox.pack_start(scroll, True, True, 2)
         vbox.show_all()
         self.eventboxlessons.add(vbox)
 

@@ -17,16 +17,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+import gvrng
 import logging
 logging.getLogger('').setLevel(logging.DEBUG)
 
 from gi.repository import Gtk
 from sugar3.activity import activity
-
-try:
-    import gvrng
-except:
-    logging.getLogger('start_activity').exception("Error importing gvrng")
 
 
 class GvRngActivity(activity.Activity):
@@ -39,10 +35,5 @@ class GvRngActivity(activity.Activity):
         self.logger.debug("Start gvrng")
         # Start SP
 
-        try:
-            gvrng.main(handle=handle,parent=self)
-
-        except:
-            self.logger.exception("Error starting gvrng")
-            self.close()
+        gvrng.main(handle=handle, parent=self)
 

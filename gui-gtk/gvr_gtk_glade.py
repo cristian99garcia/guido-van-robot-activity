@@ -38,7 +38,7 @@ class QuitDialog(Gtk.Dialog):
         ##self.cancelbutton1.connect("cancel", self.on_QuitDialog_delete_event)
         self.dialog_action_area1.add(self.cancelbutton1)
 
-        self.okbutton1 = Gtk.Button.new_from_stock.new_from_stock(Gtk.STOCK_OK)
+        self.okbutton1 = Gtk.Button.new_from_stock(Gtk.STOCK_OK)
         ##self.okbutton1.connect("clicked", self.on_dialog_okbutton1_clicked)
         self.dialog_action_area1.add(self.okbutton1)
 
@@ -134,7 +134,7 @@ class EditorWin(Gtk.Window):
         self.menubar2.append(self.menuitem5)
 
         self.menuitem5_menu = Gtk.Menu()
-        self.menuitem5.set_submenu(self.menuitem5)
+        self.menuitem5.set_submenu(self.menuitem5_menu)
 
         self.new1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_NEW)
         ##self.new1.connect("activate", self.on_new1_activate)
@@ -154,13 +154,16 @@ class EditorWin(Gtk.Window):
 
         self.menuitem5_menu.append(Gtk.SeparatorMenuItem())
 
-        self.print1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PRINt)
+        self.print1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PRINT)
         ##self.print1.connect("activate", self.on_print1_activate)
         self.menuitem5_menu.append(self.print1)
 
         self.menuitem6 = Gtk.MenuItem(_("_Edit"))
         self.menuitem6.set_use_underline(True)
         self.menubar2.append(self.menuitem6)
+
+        self.menuitem6_menu = Gtk.Menu()
+        self.menuitem6.set_submenu(self.menuitem6_menu)
 
         self.cut1 = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_CUT)
         ##self.cut1.connect("activate", self.on_cut1_activate)
@@ -183,7 +186,7 @@ class EditorWin(Gtk.Window):
         self.scrolledwindow1.set_shadow_type(Gtk.ShadowType.IN)
         self.vbox4.pack_start(self.scrolledwindow1, True, True, 0)
 
-        self.statusbar2 = Gtk.StatusBar()
+        self.statusbar2 = Gtk.Statusbar()
         self.vbox4.pack_end(self.statusbar2, False, False, 2)
 
         self.show_all()
@@ -208,7 +211,7 @@ class SetLanguageDialog(Gtk.Dialog):
         self.label7.set_padding(0, 4)
         self.vbox5.pack_start(self.label7, False, False, 0)
 
-        store = Gtk.ListStore(str)
+        model = Gtk.ListStore(str)
         model.append([_("Catalan")])
         model.append([_("Dutch")])
         model.append([_("English")])
@@ -219,7 +222,7 @@ class SetLanguageDialog(Gtk.Dialog):
         model.append([_("Italian")])
 
         self.comboboxentry_language = Gtk.ComboBox.new_with_model_and_entry(model)
-        self.vbox5.pack_start(self.comboboxentry_language, False, False, 4, 1)
+        self.vbox5.pack_start(self.comboboxentry_language, False, False, 4)
 
         self.comboboxentry_entry1 = self.comboboxentry_language.get_children()[0]
 
@@ -264,11 +267,11 @@ class SetSpeedDialog(Gtk.Dialog):
         model.append(["Slow"])
 
         self.comboboxentry_speed = Gtk.ComboBox.new_with_model_and_entry(model)
-        self.vbox6.pack_start(self.comboboxentry, False, False, 4)
+        self.vbox6.pack_start(self.comboboxentry_speed, False, False, 4)
 
         self.comboboxentry_entry2 = self.comboboxentry_speed.get_children()[0]
 
-        self.dialog_action_area5 = Gtk.HBoxButtonBox()
+        self.dialog_action_area5 = Gtk.HButtonBox()
         self.dialog_action_area5.set_layout(Gtk.ButtonBoxStyle.END)
         self.vbox.pack_end(self.dialog_action_area5, False, False, 0)
 
@@ -300,18 +303,18 @@ class SummaryDialog(Gtk.Dialog):
         self.scrolledwindow3.set_border_width(4)
         self.scrolledwindow3.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.scrolledwindow3.set_shadow_type(Gtk.ShadowType.IN)
-        self.dialog_vbox6.pack_start(self.scrolledwindow3)
+        self.dialog_vbox6.pack_start(self.scrolledwindow3, True, True, 0)
 
         self.textview1 = Gtk.TextView()
         self.scrolledwindow3.add(self.textview1)
 
-        self.action_area = Gtk.HBoxButtonBox()
-        self.action_area.set_layout(Gtk.ButtonBoxStyle.END)
-        self.vbox.pack_end(self.action_area)
+        self.hbuttonbox2 = Gtk.HButtonBox()
+        self.hbuttonbox2.set_layout(Gtk.ButtonBoxStyle.END)
+        self.vbox.pack_end(self.hbuttonbox2, False, False, 0)
 
         self.closebutton1 = Gtk.Button.new_from_stock(Gtk.STOCK_CLOSE)
         ##self.closebutton1.connect("clicked", on_SummaryDialog_delete_event)
-        self.action_area.add(self.closebutton1)
+        self.hbuttonbox2.add(self.closebutton1)
 
         self.show_all()
 
@@ -332,7 +335,7 @@ class RobotDialog(Gtk.Dialog):
 
         self.table1 = Gtk.Table(5, 2)
         self.table1.set_border_width(7)
-        self.table1.set_row_spacing(8)
+        self.table1.set_row_spacing(8, 0)
         self.table1.set_homogeneous(True)
         self.dialog_vbox7.pack_start(self.table1, True, True, 0)
 
@@ -377,7 +380,7 @@ class RobotDialog(Gtk.Dialog):
         self.label9.set_xalign(0)
         self.table1.attach(self.label9, 2, 1, 1, 1)
 
-        self.dialog_action_area7 = Gtk.HBoxButtonBox()
+        self.dialog_action_area7 = Gtk.HButtonBox()
         self.dialog_action_area7.set_layout(Gtk.ButtonBoxStyle.END)
         self.dialog_vbox7.pack_end(self.dialog_action_area7, False, False, 0)
 
@@ -391,15 +394,15 @@ class RobotDialog(Gtk.Dialog):
         self.show_all()
 
 
-class window_main(Gtk.Window):
+class window_main(Gtk.VBox):
 
     def __init__(self):
-        Gtk.Window.__init__(self)
+        Gtk.VBox.__init__(self)
 
         self.frame5 = Gtk.Frame()
         self.frame5.set_border_width(8)
         self.frame5.set_shadow_type(Gtk.ShadowType.NONE)
-        self.frame5.props.laebl_xalign = 0
+        self.frame5.props.label_xalign = 0
         self.add(self.frame5)
 
         self.alignment17 = Gtk.Alignment()
@@ -409,11 +412,11 @@ class window_main(Gtk.Window):
         self.alignment17.add(self.hpaned1)
 
         self.notebook1 = Gtk.Notebook()
-        self.hpaned1.pack1(xdlv.notebook1)
+        self.hpaned1.pack1(self.notebook1)
 
         self.frame4 = Gtk.Frame()
         self.frame4.set_size_request(400, 1)
-        self.frame4.set_border_wisth(6)
+        self.frame4.set_border_width(6)
         self.frame4.props.label_xalign = 0
         self.notebook1.append_page(self.frame4, Gtk.Label(_("Guido's World")))
 
@@ -449,7 +452,7 @@ class window_main(Gtk.Window):
         self.menubar7.append(self.menuitem32)
 
         self.menuitem32_menu = Gtk.Menu()
-        self.menuitem32.set_submenu(self.menuitem32)
+        self.menuitem32.set_submenu(self.menuitem32_menu)
 
         self.imagemenuitem50 = Gtk.ImageMenuItem(_("Set speed..."))
         self.imagemenuitem50.set_image(Gtk.Image.new_from_stock(Gtk.STOCK_REFRESH, Gtk.IconSize.MENU))
@@ -498,11 +501,11 @@ class window_main(Gtk.Window):
 
         self.hbuttonbox1 = Gtk.HButtonBox()
         self.hbuttonbox1.set_layout(Gtk.ButtonBoxStyle.START)
-        self.alignment13.add(self.buttonbox1)
+        self.alignment13.add(self.hbuttonbox1)
 
         self.button_reload = Gtk.Button()
         ##self.button_reload.connect("clicked", self.on_button_reload)
-        self.buttonbox1.add(self.button_reload)
+        self.hbuttonbox1.add(self.button_reload)
 
         self.alignment14 = Gtk.Alignment()
         self.alignment14.props.xscale = 0
@@ -576,7 +579,7 @@ class window_main(Gtk.Window):
         self.label24 = Gtk.Label(_("Abort"))
         self.hbox12.pack_start(self.label24, False, False, 0)
 
-        self.scrolledwindow8 = Gtk.Scrolledwindow()
+        self.scrolledwindow8 = Gtk.ScrolledWindow()
         self.scrolledwindow8.set_size_request(400, 500)
         self.scrolledwindow8.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.vbox11.pack_start(self.scrolledwindow8, False, False, 0)
@@ -587,8 +590,8 @@ class window_main(Gtk.Window):
         self.vbox11.pack_end(self.statusbar7, False, False, 0)
 
         self.label19 = Gtk.Label()
-        self.label19.set_markup("<b>%s<b>" % _("Guido's World"))
-        self.frame19.add(self.label19)
+        self.label19.set_markup("<b>%s</b>" % _("Guido's World"))
+        self.frame6.add(self.label19)
 
         self.eventboxlanguage = Gtk.EventBox()
         self.notebook1.append_page(self.eventboxlanguage, Gtk.Label(_("Language reference")))
@@ -644,4 +647,15 @@ class window_main(Gtk.Window):
         self.frame7.add(self.alignment18)
 
         self.show_all()
+
+if __name__ == "__main__":
+    QuitDialog()
+    AboutDialog()
+    FileDialog()
+    EditorWin()
+    SetLanguageDialog()
+    SetSpeedDialog()
+    SummaryDialog()
+    RobotDialog()
+    window_main()
 

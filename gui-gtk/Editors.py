@@ -29,18 +29,24 @@ from gi.repository import GtkSource
 
 
 class Editor:
+
     """Wraps a gtrksourceview widget and adds a few abstraction methods."""
+
     def __init__(self,parent,title=''):
         self.parent = parent
         self.logger = logging.getLogger("gvr.Editors.Editor")
         self.logger.debug("Using GtkSource version 3.0")
         # remove any children from previous sessions
+
         for child in self.parent.get_children():
             self.parent.remove(child)
+
         # Look for the locale to which the syntax highlighting should be set
         # We assume the locale is available, if not there won't be any higlighting.
+
         try:
             loc = utils.get_locale()[:2]
+
         except Exception,info:
             self.logger.exception("Error in checking locale")
             loc = ''

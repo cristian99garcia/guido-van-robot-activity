@@ -18,46 +18,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-
 import logging
 import sys,os,__builtin__,ConfigParser
 import utils
 
-PLATFORM = utils.platform
-
-if PLATFORM != 'XO':
-    CONSOLELOGLEVEL = logging.DEBUG
-    FILELOGLEVEL = logging.DEBUG
-    LOGPATH = 'gvr.log'
-    #create logger
-    logger = logging.getLogger("gvr")
-    logger.setLevel(CONSOLELOGLEVEL)
-    #create console handler and set level to error
-    ch = logging.StreamHandler()
-    ch.setLevel(CONSOLELOGLEVEL)
-    #create file handler and set level to debug
-    fh = logging.FileHandler(LOGPATH)
-    fh.setLevel(FILELOGLEVEL)
-    #create formatter
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    #add formatter to ch and fh
-    ch.setFormatter(formatter)
-    fh.setFormatter(formatter)
-    #add ch and fh to logger
-    logger.addHandler(ch)
-    logger.addHandler(fh)
-
-        
 module_logger = logging.getLogger("gvr.gvrng")
 module_logger.debug("Start logging")
 
-if PLATFORM != 'XO':
-    # This is a kludge to execute the toplevel code in utils as it is already 
-    # imported before the loggers are set.                             
-    reload(utils)                                                             
-    import utils
-
 utils.setUpUnixRC()
+
 
 # This stuff must be called before importing worldMap,world and guiWorld
 def SetLocale(lang=None):
@@ -66,10 +35,12 @@ def SetLocale(lang=None):
     rc_d = utils.parseRcFile()
     try:
         LocaleLang = rc_d['default']['lang']
+
     except Exception,info:
         module_logger.exception("Error reading rc dict, setting language to system")
         module_logger.error("contents of rc_d: %s" % rc_d)
         LocaleLang = 'system'
+
     #This will set the locale used by gvr and returns the tuple (txt,loc)
     # txt is a error message, if any else it will be an empty string.
     # loc is a string with the locale country code set for gvr, this can be
@@ -110,10 +81,7 @@ def main(handle=None, parent=None):
         # The abstraction layer on top of the gvr stuff
         model = GvrModel.GvrModel()
         # view must be the main GUI window
-        if PLATFORM == 'XO':
-            view = gvr_gtk.WindowXO(handle, parent)# all the gui windows runs in one window on XO
-        else:
-            view = gvr_gtk.Window(parent)
+        view = gvr_gtk.WindowXO(handle, parent)# all the gui windows runs in one window on XO
         # the controller must have access to the model and view
         contr = GvrController.Controller(model,view)
         # we also must give the model access to the controller

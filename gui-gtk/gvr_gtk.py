@@ -154,10 +154,10 @@ class WindowXO(gvr_gtk_glade.window_main):
                 b.set_sensitive(value)
 
         else:
-            but = {'abort':self.button_abort,
-                'reload':self.button_reload,
-                'execute':self.button_execute,
-                'step':self.button_step}[button]
+            but = {'abort': self.button_abort,
+                'reload': self.button_reload,
+                'execute': self.button_execute,
+                'step': self.button_step}[button]
 
             but.set_sensitive(value)
 
@@ -320,10 +320,10 @@ class WindowXO(gvr_gtk_glade.window_main):
 
         dlg = QuitDialog()
         dlg.QuitDialog.show()
-    
+
     def on_set_speed1_activate(self, widget, *args):
         dlg = SetSpeedDialog()
-        response = dlg.SetSpeedDialog.run()
+        response = dlg.run()
 
         if response == Gtk.ResponseType.OK:
             self.timerinterval = dlg.get_choice()
@@ -711,7 +711,7 @@ class WorldTextEditorWin(TextEditorWin):
         for child in self.parent.alignment18.get_children():
             self.parent.alignment18.remove(child)
 
-        self.parent.alignment18.add(self.vbox4)
+        ##self.parent.alignment18.add(self.vbox4)
 
     def __str__(self):
         return 'wld'
@@ -719,7 +719,7 @@ class WorldTextEditorWin(TextEditorWin):
     def on_new1_activate(self,widget=None,file=''):
         self.parent.new_world_editor()
 
-    def on_open1_activate(self,widget=None,file=''):
+    def on_open1_activate(self, widget=None, file=''):
         self.on_quit2_activate()# this takes care of saving content yes/no
         if not file:
             dlg = FileDialog(action='open',title=_("Open GvR world"),ext='wld')
@@ -826,7 +826,7 @@ class SetSpeedDialog(gvr_gtk_glade.SetSpeedDialog):
         return choice
     
     def on_SetSpeedDialog_delete_event(self, widget, *args):
-        self.SetSpeedDialog.destroy()
+        self.destroy()
     
     def on_okbutton4_clicked(self, widget, *args):
         pass
@@ -837,10 +837,7 @@ class SummaryDialog(gvr_gtk_glade.SummaryDialog):
     def __init__(self):
         gvr_gtk_glade.SummaryDialog.__init__(self)
 
-        self.new()
-
-    def new(self):
-        self.closebutton1.connect("clicked", on_SummaryDialog_delete_event)
+        self.closebutton1.connect("clicked", self.on_SummaryDialog_delete_event)
 
     def set_text(self,txt):
         # first line is also used as the title
